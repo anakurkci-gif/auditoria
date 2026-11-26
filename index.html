@@ -1,0 +1,2367 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#cdb0b3">
+<meta name="description" content="Аудитория — студенческий планер: расписание, конспекты, календарь посещаемости, карточки памяти и ИИ-репетитор.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Аудитория — студенческий планер">
+<meta property="og:description" content="Расписание, конспекты, посещаемость, карточки памяти и ИИ-репетитор в одном планере.">
+<meta property="og:image" content="icons/icon-512.png">
+<meta name="twitter:card" content="summary_large_image">
+<title>Аудитория — студенческий планер</title>
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{
+  --bg:#cdb0b3;
+  --bg-soft:#d6bcbe;
+  --ink:#252221;
+  --ink-soft:#4b4441;
+  --charcoal:#56504c;
+  --charcoal-2:#635c57;
+  --cream:#f2e9e3;
+  --cream-2:#e9dcd5;
+  --pink:#e4c8c8;
+  --pink-deep:#d3a9ab;
+  --wine:#7b3a3f;
+  --line:rgba(37,34,33,.16);
+  --line-strong:rgba(37,34,33,.34);
+  --line-light:rgba(242,233,227,.18);
+  --font-display:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font-sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--font-sans);
+  font-size:14px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+  padding-bottom:92px;
+}
+@media(min-width:1024px){body{padding-bottom:0}}
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.16;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.4'/%3E%3C/svg%3E");
+}
+::selection{background:var(--pink-deep);color:var(--charcoal)}
+:focus-visible{outline:2px solid var(--wine);outline-offset:2px}
+[hidden]{display:none!important}
+.svg-sprite{position:absolute;width:0;height:0;overflow:hidden}
+.icon{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.18em;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.shell{max-width:1180px;margin:0 auto;padding:26px 20px 44px;position:relative;z-index:1}
+.grid > *{min-width:0}
+.panel{min-width:0}
+.display-xl,.display-lg,.display-md{overflow-wrap:break-word}
+@media(min-width:768px){.shell{padding:34px 34px 60px}}
+.muted{color:rgba(37,34,33,.62)}
+.label-muted{font-size:9px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.55);margin:0}
+.panel-dark .label-muted,.panel-dark .muted{color:rgba(242,233,227,.72)}
+.panel h1,.panel h2,.panel h3,.panel p{margin-top:0}
+/* ---------- header ---------- */
+.site-header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:18px;padding-bottom:18px;border-bottom:1px solid var(--line-strong);position:relative}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.brand-mark{width:48px;height:48px;border:1px solid rgba(37,34,33,.6);display:grid;place-items:center;font-family:var(--font-display);font-size:23px;font-weight:500;line-height:1;padding-top:3px;flex:none}
+.brand-eyebrow{font-size:9px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.6);margin:0 0 4px}
+.brand-title{font-family:var(--font-display);font-weight:600;text-transform:uppercase;letter-spacing:.13em;font-size:clamp(21px,3vw,29px);line-height:1;margin:0}
+.header-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
+.header-date{font-size:9px;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.62);margin:0}
+.status-pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-strong);padding:5px 10px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.7);white-space:nowrap}
+.status-pill .dot{width:5px;height:5px;border-radius:50%;background:var(--wine);flex:none}
+.status-pill.is-on .dot{background:#3f6b4d}
+/* ---------- nav ---------- */
+.main-nav{display:flex;margin:22px 0 30px;border-bottom:1px solid var(--line-strong)}
+.nav-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 8px;border:0;border-right:1px solid var(--line);background:transparent;color:rgba(37,34,33,.62);font-family:var(--font-sans);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .2s,color .2s}
+.nav-btn:last-child{border-right:0}
+.nav-btn .icon{width:15px;height:15px}
+.nav-btn:hover{background:rgba(242,233,227,.35);color:var(--ink)}
+.nav-btn.active{background:var(--charcoal);color:var(--cream)}
+@media(max-width:1023px){
+  .main-nav{position:fixed;left:0;right:0;bottom:0;z-index:60;margin:0;padding-bottom:env(safe-area-inset-bottom);background:rgba(242,233,227,.97);backdrop-filter:blur(12px);border-top:1px solid var(--line-strong);border-bottom:0;display:grid;grid-template-columns:repeat(6,1fr)}
+  .nav-btn{flex-direction:column;gap:4px;padding:9px 2px 8px;font-size:7.5px;letter-spacing:.05em;border-right:1px solid rgba(37,34,33,.08)}
+  .nav-btn .icon{width:18px;height:18px}
+  .nav-btn.active{background:transparent;color:var(--wine);box-shadow:inset 0 2px 0 var(--wine)}
+}
+/* ---------- panels ---------- */
+.tab-content{display:none}
+.tab-content.active{display:block;animation:rise .4s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+.panel{position:relative;padding:26px;background:var(--cream);border:1px solid var(--line);border-radius:2px;box-shadow:0 30px 60px -52px rgba(30,25,24,.9);overflow:hidden}
+@media(min-width:768px){.panel{padding:30px}}
+.panel > *:not(.burst):not(.arch){position:relative;z-index:1}
+.panel-dark{background:var(--charcoal);color:var(--cream);border-color:rgba(37,34,33,.5)}
+.panel-pink{background:var(--pink);border-color:rgba(37,34,33,.16)}
+.burst{position:absolute;width:120px;height:120px;right:-44px;bottom:-44px;color:rgba(37,34,33,.9);pointer-events:none;z-index:0;opacity:.92}
+.panel-dark .burst{color:var(--pink)}
+.panel-pink .burst{color:rgba(43,39,37,.18)}
+.arch{position:absolute;top:-34px;right:6%;width:190px;height:190px;color:rgba(37,34,33,.16);pointer-events:none;z-index:0}
+.display-xl{font-family:var(--font-display);font-weight:600;font-size:clamp(31px,4.4vw,52px);line-height:1.02;letter-spacing:.005em;text-transform:uppercase;margin:0}
+.display-lg{font-family:var(--font-display);font-weight:600;font-size:clamp(23px,2.6vw,32px);line-height:1.08;text-transform:uppercase;margin:4px 0 0}
+.display-md{font-family:var(--font-display);font-weight:600;font-size:clamp(19px,2vw,24px);line-height:1.15;margin:2px 0 0;text-transform:uppercase}
+.section-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:22px}
+.eyebrow{font-size:9px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.6);margin:0}
+.panel-dark .eyebrow{color:rgba(242,233,227,.72)}
+.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.rule{height:1px;background:var(--line);border:0;margin:16px 0}
+.panel-dark .rule{background:var(--line-light)}
+.tag{display:inline-block;font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;border:1px solid var(--line-strong);padding:4px 8px;border-radius:1px;opacity:.85;white-space:nowrap}
+.panel-dark .tag{border-color:rgba(242,233,227,.32)}
+.count-badge{font-family:var(--font-display);font-size:17px;letter-spacing:.06em;color:var(--pink-deep)}
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:var(--font-sans);font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:11px 16px;border-radius:2px;border:1px solid transparent;cursor:pointer;transition:background .2s,color .2s,border-color .2s;text-decoration:none}
+.btn .icon{width:14px;height:14px}
+.btn-dark{background:var(--charcoal);color:var(--cream)}
+.btn-dark:hover{background:var(--charcoal-2)}
+.btn-outline{background:transparent;border-color:var(--line-strong);color:var(--ink)}
+.btn-outline:hover{background:rgba(37,34,33,.06)}
+.btn-wine{background:var(--wine);color:#f7eeea}
+.btn-wine:hover{background:#8c454a}
+.btn-sm{padding:8px 12px;font-size:8.5px;letter-spacing:.13em}
+.btn-block{width:100%}
+.panel-dark .btn-outline{border-color:rgba(242,233,227,.35);color:var(--cream)}
+.panel-dark .btn-outline:hover{background:rgba(242,233,227,.1)}
+.panel-dark .btn-dark{background:var(--cream);color:var(--charcoal)}
+.icon-btn{width:34px;height:34px;display:inline-grid;place-items:center;border:1px solid var(--line-strong);background:transparent;color:inherit;border-radius:2px;cursor:pointer;transition:background .2s}
+.icon-btn:hover{background:rgba(37,34,33,.07)}
+.panel-dark .icon-btn{border-color:rgba(242,233,227,.3);color:var(--cream)}
+.panel-dark .icon-btn:hover{background:rgba(242,233,227,.1)}
+.link-btn{background:none;border:0;padding:0;color:inherit;font-family:var(--font-sans);font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;cursor:pointer;border-bottom:1px solid currentColor;opacity:.7}
+.link-btn:hover{opacity:1}
+/* ---------- home ---------- */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.stat{padding:0 14px;border-right:1px solid var(--line);min-width:0}
+.stat:first-child{padding-left:0}
+.stat:last-child{border-right:0;padding-right:0}
+.stat-value{display:block;font-family:var(--font-display);font-size:clamp(22px,2.6vw,31px);line-height:1;font-weight:500;white-space:nowrap}
+.stat-label{display:block;margin-top:7px;font-size:8px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;opacity:.55}
+.hero-sub{font-size:12.5px;line-height:1.6;color:rgba(37,34,33,.68);margin:14px 0 0;max-width:38ch}
+.greeting-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.greeting-edit{display:inline-flex;align-items:center;gap:7px;margin-top:14px;padding:7px 10px;border:1px solid var(--line);background:transparent;color:rgba(37,34,33,.62);font-family:inherit;font-size:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .18s,border-color .18s,color .18s}
+.greeting-edit:hover{background:rgba(242,233,227,.55);border-color:var(--line-strong);color:var(--ink)}
+.greeting-edit .icon{width:12px;height:12px}
+.deadline{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:13px 0;border-bottom:1px solid var(--line-light)}
+.deadline:last-child{border-bottom:0;padding-bottom:0}
+.deadline-num{font-family:var(--font-display);font-size:11px;letter-spacing:.06em;opacity:.45;padding-top:2px}
+.deadline-title{font-family:var(--font-display);font-size:15.5px;font-weight:600;line-height:1.25}
+.deadline-meta{font-size:9.5px;letter-spacing:.04em;opacity:.6;margin-top:4px}
+.deadline-badge{align-self:center;font-size:8px;letter-spacing:.1em;text-transform:uppercase;border:1px solid rgba(242,233,227,.35);padding:4px 7px;white-space:nowrap}
+.deadline-badge.is-today{background:var(--pink);border-color:var(--pink);color:var(--charcoal)}
+.deadline-badge.is-late{border-color:rgba(228,200,200,.55);color:var(--pink)}
+button.deadline{width:100%;appearance:none;-webkit-appearance:none;background:transparent;border:0;border-bottom:1px solid var(--line-light);color:inherit;font-family:inherit;text-align:left;cursor:pointer;transition:background .18s}
+button.deadline:hover{background:rgba(242,233,227,.06)}
+button.deadline:hover .deadline-title{text-decoration:underline;text-underline-offset:3px}
+button.deadline:last-child{border-bottom:0}
+.deadline-hint{font-size:8px;letter-spacing:.1em;text-transform:uppercase;opacity:.45;margin:10px 0 0;text-align:center}
+.latest-title{font-family:var(--font-display);font-size:21px;line-height:1.15;font-weight:600;margin:10px 0 8px}
+.latest-excerpt{font-size:11.5px;line-height:1.6;color:rgba(37,34,33,.72);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.latest-meta{font-size:8.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.55;margin-top:12px}
+/* ---------- lessons ---------- */
+.lesson{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 0;border-bottom:1px solid var(--line)}
+.lesson:last-child{border-bottom:0;padding-bottom:0}
+.lesson:first-child{padding-top:0}
+.panel-dark .lesson{border-color:var(--line-light)}
+.lesson-index{font-family:var(--font-display);font-size:11px;opacity:.42;letter-spacing:.04em}
+.lesson-name{font-family:var(--font-display);font-size:16px;font-weight:600;line-height:1.2;overflow-wrap:anywhere}
+.lesson-meta{font-size:9.5px;letter-spacing:.04em;opacity:.58;margin-top:3px}
+.att-btn{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-sans);font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;padding:6px 8px;border:1px solid var(--line-strong);background:transparent;color:inherit;border-radius:1px;cursor:pointer;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.att-btn .icon{width:11px;height:11px}
+.att-btn:hover{background:rgba(37,34,33,.08)}
+.att-was{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
+.att-was:hover{background:var(--charcoal-2)}
+.att-skip{background:var(--wine);color:#f7eeea;border-color:var(--wine)}
+.att-skip:hover{background:#8c454a}
+.panel-dark .att-btn{border-color:rgba(242,233,227,.34);color:var(--cream)}
+.panel-dark .att-btn:hover{background:rgba(242,233,227,.12)}
+.panel-dark .att-was{background:var(--cream);color:var(--charcoal);border-color:var(--cream)}
+.panel-dark .att-skip{background:var(--pink-deep);border-color:var(--pink-deep);color:var(--charcoal)}
+.empty-note{padding:20px 14px;border:1px dashed rgba(37,34,33,.26);font-size:11.5px;text-align:center;color:rgba(37,34,33,.6)}
+.panel-dark .empty-note{border-color:rgba(242,233,227,.26);color:rgba(242,233,227,.62)}
+/* ---------- subjects & notes ---------- */
+.subject-card{display:flex;flex-direction:column;gap:6px;width:100%;padding:14px;border:1px solid var(--line);background:rgba(242,233,227,.5);color:var(--ink);text-align:left;cursor:pointer;transition:background .2s,border-color .2s,color .2s;font-family:inherit}
+.subject-card:hover{background:var(--cream);border-color:var(--line-strong)}
+.subject-card .num{font-size:8.5px;letter-spacing:.18em;opacity:.45}
+.subject-card .name{font-family:var(--font-display);font-size:16px;font-weight:600;line-height:1.2}
+.subject-card .meta{font-size:8px;letter-spacing:.13em;text-transform:uppercase;opacity:.5;margin-top:3px}
+.subject-card.active{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
+.subject-card.active .num,.subject-card.active .meta{opacity:.6}
+.subject-add{border-style:dashed;background:transparent;align-items:center;justify-content:center;flex-direction:row;gap:8px;font-size:9px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.62);padding:12px}
+.subject-add:hover{background:rgba(242,233,227,.45);color:var(--ink)}
+.subject-row{position:relative}
+.subject-row .subject-card{padding-right:72px}
+.subject-tools{position:absolute;top:7px;right:7px;display:flex;gap:2px}
+.subject-tool{width:28px;height:28px;display:grid;place-items:center;padding:0;border:1px solid transparent;background:transparent;color:inherit;cursor:pointer;opacity:.45;transition:opacity .18s,background .18s,border-color .18s,color .18s}
+.subject-row:hover .subject-tool,.subject-row:focus-within .subject-tool{opacity:.9}
+.subject-tool:hover{opacity:1;background:rgba(242,233,227,.6);border-color:var(--line)}
+.subject-tool.is-danger:hover{color:var(--wine);border-color:rgba(122,62,66,.3);background:rgba(122,62,66,.08)}
+.subject-row .subject-card.active ~ .subject-tools{color:var(--cream)}
+.subject-row .subject-card.active ~ .subject-tools .subject-tool:hover{background:rgba(242,233,227,.16);border-color:rgba(242,233,227,.3)}
+.subject-row .subject-card.active ~ .subject-tools .subject-tool.is-danger:hover{color:#f3d9d9;background:rgba(243,217,217,.12);border-color:rgba(243,217,217,.28)}
+.subject-tool .icon{width:13px;height:13px}
+@media(hover:none){
+  .subject-tool{opacity:.7}
+}
+.subject-empty{padding:18px 14px;border:1px dashed rgba(37,34,33,.26);font-size:11.5px;line-height:1.6;color:rgba(37,34,33,.62)}
+.subject-hint{font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(37,34,33,.42);margin:10px 0 0;text-align:center}
+.note-card{display:grid;grid-template-columns:1fr auto;gap:10px 16px;width:100%;padding:16px;border:1px solid var(--line);background:rgba(255,255,255,.34);color:var(--ink);text-align:left;cursor:pointer;transition:background .18s,border-color .18s,transform .18s;font-family:inherit}
+.note-card:hover{background:#fff;border-color:var(--line-strong);transform:translateY(-1px)}
+.note-date{font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.5}
+.note-title{font-family:var(--font-display);font-size:17px;font-weight:600;line-height:1.25;margin:5px 0 0;overflow-wrap:anywhere}
+.note-excerpt{font-size:11px;line-height:1.55;color:rgba(37,34,33,.64);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:6px 0 0;grid-column:1/-1}
+.note-open{align-self:center;display:inline-flex;align-items:center;gap:6px;font-size:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.55;white-space:nowrap}
+.note-card:hover .note-open{opacity:1}
+/* ---------- schedule ---------- */
+.week-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.week-range{font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:0 4px;white-space:nowrap}
+.day-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-bottom:18px}
+.day-chip{display:flex;flex-direction:column;align-items:center;gap:3px;padding:11px 4px 9px;border:1px solid var(--line);background:rgba(242,233,227,.4);color:var(--ink);cursor:pointer;transition:background .18s,color .18s,border-color .18s;font-family:inherit}
+.day-chip:hover{border-color:var(--line-strong)}
+.day-chip .dow{font-size:8px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;opacity:.55}
+.day-chip .dom{font-family:var(--font-display);font-size:19px;line-height:1;font-weight:500}
+.day-chip .cnt{font-size:7px;letter-spacing:.06em;text-transform:uppercase;opacity:.45}
+.day-chip.active{background:var(--charcoal);color:var(--cream);border-color:var(--charcoal)}
+.day-chip.active .dow,.day-chip.active .cnt{opacity:.68}
+.week-sum{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:16px}
+.week-sum div{background:var(--pink);padding:12px}
+.week-sum .k{display:block;font-family:var(--font-display);font-size:21px;line-height:1;font-weight:600}
+.week-sum .l{display:block;font-size:7.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.55;margin-top:5px}
+/* ---------- calendar ---------- */
+.cal-toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.cal-month{font-family:var(--font-display);font-size:clamp(19px,2.2vw,25px);text-transform:uppercase;letter-spacing:.04em;line-height:1;margin:0;min-width:0}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);margin:16px 0 5px;border-bottom:1px solid var(--line);padding-bottom:6px}
+.cal-weekday{text-align:center;font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;opacity:.5}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-cell{position:relative;display:flex;flex-direction:column;gap:4px;min-height:66px;padding:6px 5px 5px;border:1px solid rgba(37,34,33,.1);background:rgba(255,255,255,.3);color:var(--ink);text-align:left;cursor:pointer;transition:background .15s,border-color .15s;font-family:inherit}
+.cal-cell:hover{border-color:var(--line-strong)}
+.cal-cell.empty{background:transparent;border-color:transparent;cursor:default;pointer-events:none}
+.cal-cell.other{opacity:.32;background:transparent;cursor:default}
+.cal-cell.today{box-shadow:inset 0 0 0 1px rgba(37,34,33,.55)}
+.cal-cell.selected{background:var(--cream);outline:2px solid var(--charcoal);outline-offset:-1px;z-index:1}
+.cal-cell.has-skip{background:rgba(123,58,63,.1);border-color:rgba(123,58,63,.34)}
+.cal-cell.has-skip.selected{background:rgba(123,58,63,.16)}
+.cal-dom{font-family:var(--font-display);font-size:13px;font-weight:600;line-height:1}
+.cal-cell.has-skip .cal-dom{color:var(--wine)}
+.cal-bars{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+.cal-bar{width:6px;height:6px;border:1px solid rgba(37,34,33,.36);display:block}
+.bar-was{background:var(--charcoal);border-color:var(--charcoal)}
+.bar-skip{background:var(--wine);border-color:var(--wine)}
+.bar-pending{background:transparent}
+.cal-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.legend-item{display:inline-flex;align-items:center;gap:5px;font-size:8px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;opacity:.6;white-space:nowrap}
+.legend-swatch{width:8px;height:8px;border:1px solid var(--line-strong);display:inline-block}
+.legend-swatch.s-was{background:var(--charcoal);border-color:var(--charcoal)}
+.legend-swatch.s-skip{background:var(--wine);border-color:var(--wine)}
+.legend-swatch.s-none{background:transparent}
+.cal-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(37,34,33,.18);border:1px solid rgba(37,34,33,.18);margin-top:14px}
+.cal-stats div{background:var(--pink);padding:10px 8px;text-align:center}
+.cal-stats .k{display:block;font-family:var(--font-display);font-size:19px;line-height:1;font-weight:600}
+.cal-stats .l{display:block;font-size:7px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;opacity:.55;margin-top:5px}
+.skip-list{max-height:190px;overflow-y:auto;margin-top:10px}
+.skip-item{display:flex;gap:8px;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid rgba(37,34,33,.14);font-size:10.5px;line-height:1.35}
+.skip-item:last-child{border-bottom:0}
+.skip-item .d{font-size:8px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;opacity:.55;white-space:nowrap}
+.skip-item .n{text-align:right;overflow-wrap:anywhere}
+/* ---------- flashcards ---------- */
+.flashcard{display:flex;flex-direction:column;width:100%;min-height:300px;padding:26px;border:1px solid var(--line);background:var(--cream);color:var(--ink);text-align:left;cursor:pointer;font-family:inherit;transition:border-color .2s;box-shadow:0 30px 60px -52px rgba(30,25,24,.9)}
+.flashcard:hover{border-color:var(--line-strong)}
+.flash-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.flash-body{flex:1;display:flex;flex-direction:column;justify-content:center;padding:26px 0}
+.flash-question{font-family:var(--font-display);font-size:clamp(23px,3vw,34px);line-height:1.14;font-weight:500;margin:8px 0 0;overflow-wrap:anywhere}
+.flash-answer-text{font-size:13px;line-height:1.65;color:var(--ink-soft);margin:6px 0 0}
+.flash-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:14px;border-top:1px solid var(--line)}
+.flash-hint{font-size:8px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;opacity:.5}
+.flash-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.flash-note{font-size:10px;line-height:1.5;padding:10px 12px;border:1px solid rgba(123,58,63,.35);background:rgba(123,58,63,.08);color:var(--wine);margin-top:10px}
+.progress{height:3px;background:rgba(242,233,227,.18);overflow:hidden;margin:12px 0 6px}
+.progress i{display:block;height:100%;background:var(--pink-deep);width:0;transition:width .3s}
+.flash-side-row{display:flex;justify-content:space-between;gap:10px;font-size:10.5px;padding:8px 0;border-bottom:1px solid var(--line-light)}
+.flash-side-row:last-of-type{border-bottom:0}
+/* ---------- AI ---------- */
+.chat-box{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;padding-right:4px;margin-bottom:14px;scrollbar-width:thin}
+@media(min-width:768px){.chat-box{height:390px}}
+.msg{max-width:88%;padding:11px 13px;font-size:12px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;border-radius:1px}
+.msg-ai{background:rgba(255,255,255,.6);border:1px solid var(--line);align-self:flex-start}
+.msg-user{background:var(--charcoal);color:var(--cream);align-self:flex-end;box-shadow:0 10px 20px -16px rgba(0,0,0,.6)}
+.msg-error{background:rgba(123,58,63,.08);border:1px solid rgba(123,58,63,.32);color:var(--wine);align-self:flex-start}
+.msg-label{display:block;font-size:7.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;opacity:.55;margin-bottom:4px}
+.chat-form{display:flex;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.chat-input{flex:1;min-width:0;background:rgba(255,255,255,.6);border:1px solid var(--line);border-radius:1px;padding:10px 12px;font-family:inherit;font-size:12px;color:var(--ink);outline:none;transition:border-color .2s,background .2s}
+.chat-input:focus{border-color:var(--charcoal);background:#fff}
+.quick-btn{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;padding:10px 12px;border:1px solid rgba(37,34,33,.22);background:rgba(255,255,255,.35);color:var(--ink);font-family:inherit;font-size:10.5px;text-align:left;cursor:pointer;transition:background .18s,border-color .18s}
+.quick-btn:hover{background:#fff;border-color:var(--line-strong)}
+.quick-btn .icon{opacity:.45;flex:none}
+/* ---------- forms / modal ---------- */
+.field label{display:block;font-size:8px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.55);margin-bottom:6px}
+.panel-dark .field label{color:rgba(242,233,227,.62)}
+.input,.textarea,.select{width:100%;background:rgba(255,255,255,.5);border:1px solid var(--line-strong);border-radius:1px;padding:9px 11px;font-family:var(--font-sans);font-size:12.5px;color:var(--ink);outline:none;transition:border-color .2s,background .2s}
+.input:focus,.textarea:focus,.select:focus{border-color:var(--charcoal);background:#fff}
+.textarea{resize:vertical;min-height:120px;line-height:1.6}
+select.input,select.select{cursor:pointer}
+option{background:var(--cream);color:var(--ink)}
+.panel-dark .select,.panel-dark .input{background:var(--cream);border-color:rgba(242,233,227,.5);color:var(--ink)}
+.panel-dark .select:focus,.panel-dark .input:focus{background:#fff;border-color:var(--pink-deep)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.form-error{font-size:11px;color:var(--wine);margin:8px 0 0}
+.field-hint{font-size:10.5px;line-height:1.55;color:rgba(37,34,33,.55);margin:9px 0 0}
+.modal{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;padding:16px}
+.modal-backdrop{position:absolute;inset:0;background:rgba(28,24,23,.62);backdrop-filter:blur(3px)}
+.modal-panel{position:relative;width:min(660px,100%);max-height:88vh;overflow-y:auto;background:var(--cream);border:1px solid rgba(37,34,33,.4);padding:26px;box-shadow:0 50px 90px -40px rgba(0,0,0,.6);border-radius:2px}
+@media(min-width:768px){.modal-panel{padding:34px}}
+.modal-close{position:absolute;top:12px;right:12px;width:30px;height:30px;display:grid;place-items:center;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;border-radius:1px}
+.modal-close:hover{background:rgba(37,34,33,.07)}
+.note-body{font-size:13px;line-height:1.75;color:var(--ink-soft);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:14px}
+.note-ai{margin-top:20px;padding:16px;border:1px solid var(--line-strong);background:rgba(242,233,227,.55)}
+.note-ai[hidden]{display:none}
+.note-ai-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.note-ai-model{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:rgba(37,34,33,.45)}
+.note-ai-body{font-size:12.5px;line-height:1.75;color:var(--ink-soft);white-space:pre-wrap;overflow-wrap:anywhere;margin-top:10px}
+.note-ai.is-loading .note-ai-body{opacity:.6}
+.note-ai-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.note-ai-error{font-size:11.5px;line-height:1.6;color:var(--wine);margin:10px 0 0}
+#modal-body > .eyebrow:first-child{padding-right:42px}
+#cal-detail-panel{scroll-margin-top:16px}
+.modal-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:space-between;margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+.modal-actions-right{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto}
+body.modal-open{overflow:hidden}
+/* ---------- footer ---------- */
+.site-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:38px;padding-top:16px;border-top:1px solid var(--line-strong);font-size:8px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:rgba(37,34,33,.5)}
+.footer-meta{display:flex;flex-wrap:wrap;gap:16px}
+/* ---------- misc ---------- */
+.week-note{font-size:10.5px;line-height:1.55;color:rgba(37,34,33,.66);margin:10px 0 0}
+.panel-dark .week-note{color:rgba(242,233,227,.72)}
+@media(max-width:480px){
+  .panel{padding:20px}
+  .section-head{margin-bottom:16px;gap:12px}
+  .subject-new-btn{width:100%;justify-content:center}
+  .stat{padding:0 9px}
+  .stat-label{font-size:7px;letter-spacing:.1em}
+  .cal-cell{min-height:58px;padding:5px 4px}
+  .cal-dom{font-size:12px}
+  .cal-bar{width:5px;height:5px}
+  .cal-legend{gap:9px}
+  .cal-toolbar{width:100%;gap:6px;flex-wrap:nowrap}
+  .cal-toolbar .cal-month{flex:1;text-align:center;font-size:18px}
+  .cal-toolbar .icon-btn{width:30px;height:30px}
+  .cal-toolbar .btn{padding:7px 9px;font-size:8px;letter-spacing:.08em;flex:none}
+  .day-strip{gap:3px}
+  .day-chip{padding:10px 2px}
+  .day-chip .cnt{display:none}
+  .week-bar{width:100%;justify-content:space-between;gap:6px}
+  .week-range{flex:1;text-align:center}
+  .lesson{grid-template-columns:17px minmax(0,1fr) auto;gap:8px}
+  .lesson-name{font-size:14.5px}
+  .lesson-meta{font-size:8.5px}
+  .att-btn{font-size:7.5px;padding:8px 7px;letter-spacing:.05em;min-height:32px}
+  .att-btn .icon{width:10px;height:10px}
+  .display-xl{font-size:28px}
+  .flashcard{padding:20px;min-height:250px}
+  .flash-body{padding:18px 0}
+  .flash-question{font-size:23px}
+  .flash-actions{gap:6px}
+  .chat-box{height:290px}
+  .chat-form{align-items:stretch}
+  .chat-form .btn{width:46px;padding:10px;flex:none}
+  .send-label{display:none}
+  .input,.textarea,.select,.chat-input{font-size:16px}
+  .modal-panel{padding:22px}
+  .modal-actions{flex-direction:column;align-items:stretch;gap:8px}
+  .modal-actions > .modal-actions-right{order:1}
+  .modal-actions > .btn{order:2}
+  .modal-actions-right{margin-left:0;flex-direction:column;width:100%}
+  .modal-actions .btn{width:100%;flex:none}
+  #modal-body .grid-cols-2{grid-template-columns:1fr}
+  .nav-btn{font-size:8px;letter-spacing:.02em}
+}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:rgba(37,34,33,.25)}
+::-webkit-scrollbar-track{background:transparent}
+</style>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" class="svg-sprite" aria-hidden="true">
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.8 12 3.2l9 7.6"/><path d="M5.6 9.6V21h12.8V9.6"/><path d="M9.6 21v-5.6h4.8V21"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4.2 4.7A1.7 1.7 0 0 1 5.9 3H19v18H5.9a1.7 1.7 0 0 1-1.7-1.7z"/><path d="M8 3v18"/><path d="M11.4 8.2h4.2M11.4 11.6h4.2"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.4" y="5" width="17.2" height="16" rx="1"/><path d="M3.4 9.6h17.2M8 3v4M16 3v4"/><path d="M7.4 13.4h2M11 13.4h2M14.6 13.4h2M7.4 17.2h2M11 17.2h2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.4" y="3.4" width="17.2" height="17.2" rx="1"/><path d="M3.4 9.2h17.2M3.4 15h17.2M9.2 3.4v17.2M15 3.4v17.2"/></symbol>
+  <symbol id="i-cards" viewBox="0 0 24 24"><rect x="6.5" y="4" width="14" height="16" rx="1"/><path d="M3.5 7.5v12A1.5 1.5 0 0 0 5 21h10"/><path d="M10.5 9h6M10.5 12.5h6M10.5 16h3.5"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.2c.7 4.7 2.1 6.1 6.8 6.8-4.7.7-6.1 2.1-6.8 6.8-.7-4.7-2.1-6.1-6.8-6.8 4.7-.7 6.1-2.1 6.8-6.8Z"/><path d="M18.4 16c.3 1.9.9 2.5 2.8 2.8-1.9.3-2.5.9-2.8 2.8-.3-1.9-.9-2.5-2.8-2.8 1.9-.3 2.5-.9 2.8-2.8Z"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 1.9"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s6.4-6 6.4-10.6A6.4 6.4 0 0 0 5.6 10.4C5.6 15 12 21 12 21Z"/><circle cx="12" cy="10.2" r="2.3"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8.2" cy="15.8" r="3.8"/><path d="M11 13 20 4M16.4 4H20v3.6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.4 4.4 4.4L19 6.8"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M4 12h16M14 6l6 6-6 6"/></symbol>
+  <symbol id="i-chevron-left" viewBox="0 0 24 24"><path d="m14.5 5-7 7 7 7"/></symbol>
+  <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9.5 5 7 7-7 7"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 3.6h10.4L19 7.2V20.4H5z"/><path d="M15.2 3.6v3.8H19"/><path d="M8 11h8M8 14.6h8M8 18.2h4.6"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.6 6.6h14.8M9.2 6.6V4h5.6v2.6M6.6 6.6 7.6 21h8.8l1-14.4"/><path d="M10.4 10.4v6.6M13.6 10.4v6.6"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10.4 13.6M21 3l-6.8 18-3.8-7.4L3 9.8z"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r=".8"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11.4A8 8 0 1 0 12 20a8 8 0 0 0 6.9-4"/><path d="M20 4v7.4h-7.4"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="m4 20 4.4-1 9.8-9.8a2.2 2.2 0 0 0-3.1-3.1L5.3 15.9 4 20z"/><path d="m13.9 6.4 3.7 3.7"/></symbol>
+</svg>
+<div class="shell">
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">А</span>
+      <div class="min-w-0">
+        <p class="brand-eyebrow">Студенческий планер · осень 2026</p>
+        <h1 class="brand-title">Аудитория</h1>
+      </div>
+    </div>
+    <div class="header-meta">
+      <p class="header-date" id="header-date">Среда · 19 ноября 2026</p>
+      <span class="status-pill" data-ai-status><span class="dot"></span><span class="status-text">ИИ в демо-режиме</span></span>
+    </div>
+  </header>
+
+  <nav class="main-nav" aria-label="Разделы планера">
+    <button type="button" class="nav-btn active" data-tab="home" aria-label="Главная"><svg class="icon" aria-hidden="true"><use href="#i-home"></use></svg><span>Главная</span></button>
+    <button type="button" class="nav-btn" data-tab="subjects" aria-label="Предметы и конспекты"><svg class="icon" aria-hidden="true"><use href="#i-book"></use></svg><span>Предметы</span></button>
+    <button type="button" class="nav-btn" data-tab="schedule" aria-label="Расписание"><svg class="icon" aria-hidden="true"><use href="#i-calendar"></use></svg><span>Пары</span></button>
+    <button type="button" class="nav-btn" data-tab="calendar" aria-label="Календарь посещаемости"><svg class="icon" aria-hidden="true"><use href="#i-grid"></use></svg><span>Календарь</span></button>
+    <button type="button" class="nav-btn" data-tab="cards" aria-label="Карточки памяти"><svg class="icon" aria-hidden="true"><use href="#i-cards"></use></svg><span>Карточки</span></button>
+    <button type="button" class="nav-btn" data-tab="ai" aria-label="ИИ-репетитор"><svg class="icon" aria-hidden="true"><use href="#i-spark"></use></svg><span>Репетитор</span></button>
+  </nav>
+
+  <main>
+
+    <!-- ГЛАВНАЯ -->
+    <section id="tab-home" class="tab-content active">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <article class="panel lg:col-span-7">
+          <svg class="arch" viewBox="0 0 100 100" fill="none" aria-hidden="true"><path d="M8 100V48a42 42 0 0 1 84 0v52" stroke="currentColor" stroke-width="1"/><path d="M18 100V48a32 32 0 0 1 64 0v52" stroke="currentColor" stroke-width="1" opacity=".65"/><path d="M28 100V48a22 22 0 0 1 44 0v52" stroke="currentColor" stroke-width="1" opacity=".4"/></svg>
+          <p class="eyebrow">01 — Обзор семестра</p>
+          <h2 class="display-xl mt-4" id="greeting">Добрый день</h2>
+          <p class="hero-sub" id="today-line">День для спокойной работы и ясных конспектов.</p>
+          <button type="button" class="greeting-edit" id="greeting-edit" onclick="openProfileEditor()" aria-label="Указать имя">
+            <svg class="icon" aria-hidden="true"><use href="#i-pen"></use></svg><span id="greeting-edit-label">Указать имя</span>
+          </button>
+          <div class="stat-row">
+            <div class="stat"><span class="stat-value" id="stat-attendance">—</span><span class="stat-label">Посещаемость</span></div>
+            <div class="stat"><span class="stat-value" id="stat-skips">0</span><span class="stat-label">Пропуски</span></div>
+            <div class="stat"><span class="stat-value" id="stat-deadlines">3</span><span class="stat-label">Дедлайны</span></div>
+          </div>
+        </article>
+
+        <article class="panel panel-dark lg:col-span-5">
+          <div class="panel-head">
+            <p class="eyebrow">Ближайшие дедлайны</p>
+            <span class="count-badge" id="deadline-count">03</span>
+          </div>
+          <div class="mt-5" id="deadline-list"></div>
+          <button type="button" class="btn btn-outline btn-sm btn-block mt-4" onclick="openDeadlineEditor()"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Добавить дедлайн</button>
+          <p class="deadline-hint">Нажмите на строку, чтобы изменить</p>
+        </article>
+
+        <article class="panel panel-dark lg:col-span-7">
+          <div class="panel-head">
+            <p class="eyebrow">Пары сегодня</p>
+            <span class="tag" id="today-count">0 пар</span>
+          </div>
+          <div class="mt-4" id="today-list"></div>
+        </article>
+
+        <article class="panel panel-pink lg:col-span-5">
+          <svg class="burst" viewBox="0 0 100 100" aria-hidden="true"><path fill="currentColor" d="M50 1 57 32 76 8 68 37 98 26 73 47 99 60 69 59 79 89 58 67 49 98 42 67 22 90 31 60 2 72 27 50 1 38 31 39 20 9 41 31Z"/></svg>
+          <p class="eyebrow">Из конспектов</p>
+          <div id="latest-note"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ПРЕДМЕТЫ -->
+    <section id="tab-subjects" class="tab-content">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">02 — Учебные материалы</p>
+          <h2 class="display-lg">Предметы и конспекты</h2>
+        </div>
+        <button type="button" class="btn btn-outline subject-new-btn" onclick="openSubjectEditor()"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Новый предмет</button>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <aside class="lg:col-span-4">
+          <p class="eyebrow mb-3">Список предметов</p>
+          <div id="subjects-list" class="space-y-2"></div>
+        </aside>
+        <article class="panel lg:col-span-8">
+          <div class="panel-head flex-wrap">
+            <div class="min-w-0">
+              <p class="eyebrow">Конспекты</p>
+              <h3 class="display-md" id="subject-title">Информатика</h3>
+            </div>
+            <button type="button" class="btn btn-dark btn-sm" onclick="openNoteEditor()"><svg class="icon" aria-hidden="true"><use href="#i-plus"></use></svg>Новый конспект</button>
+          </div>
+          <div class="rule"></div>
+          <div id="notes-list" class="space-y-3"></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- РАСПИСАНИЕ -->
+    <section id="tab-schedule" class="tab-content">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">03 — Расписание</p>
+          <h2 class="display-lg">Учебная неделя</h2>
+        </div>
+        <div class="week-bar">
+          <button type="button" class="icon-btn" onclick="shiftWeek(-1)" aria-label="Предыдущая неделя"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button>
+          <span class="week-range" id="week-range">16 — 21 ноября</span>
+          <button type="button" class="icon-btn" onclick="shiftWeek(1)" aria-label="Следующая неделя"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button>
+        </div>
+      </div>
+      <div class="day-strip" id="day-strip" aria-label="Дни недели"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <article class="panel lg:col-span-7">
+          <div class="panel-head flex-wrap">
+            <div class="min-w-0">
+              <p class="eyebrow" id="day-parity">Числитель</p>
+              <h3 class="display-md" id="day-title">Понедельник, 16 ноября</h3>
+            </div>
+            <span class="tag" id="day-count">0 пар</span>
+          </div>
+          <div class="rule"></div>
+          <div id="day-lessons"></div>
+          <div class="mt-6 pt-4 border-t" style="border-color:var(--line)">
+            <label for="day-notes" class="eyebrow block mb-2">Заметки на день</label>
+            <textarea id="day-notes" rows="3" class="textarea" placeholder="Важные дела, вопросы к преподавателю, что повторить…"></textarea>
+          </div>
+        </article>
+        <aside class="space-y-5 lg:col-span-5">
+          <article class="panel panel-pink">
+            <p class="eyebrow">Неделя в цифрах</p>
+            <div class="week-sum">
+              <div><span class="k" id="week-lessons">0</span><span class="l">Пар на неделе</span></div>
+              <div><span class="k" id="week-was">0</span><span class="l">Посещено</span></div>
+              <div><span class="k" id="week-skips">0</span><span class="l">Пропущено</span></div>
+              <div><span class="k" id="week-pending">0</span><span class="l">Без отметки</span></div>
+            </div>
+            <p class="week-note" id="week-note">Отмечайте пары в списке или в календаре — данные синхронизируются.</p>
+          </article>
+          <article class="panel">
+            <p class="eyebrow">Как отметить</p>
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center gap-3"><span class="att-btn att-was" style="pointer-events:none"><svg class="icon" aria-hidden="true"><use href="#i-check"></use></svg>Был</span><span class="text-[11px] muted">пара посещена</span></div>
+              <div class="flex items-center gap-3"><span class="att-btn att-skip" style="pointer-events:none"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg>Пропуск</span><span class="text-[11px] muted">пара пропущена</span></div>
+              <div class="flex items-center gap-3"><span class="att-btn" style="pointer-events:none"><svg class="icon" aria-hidden="true"><use href="#i-clock"></use></svg>Отметить</span><span class="text-[11px] muted">нет отметки</span></div>
+            </div>
+            <p class="week-note">Нажатие на кнопку переключает статус: отметка → был → пропуск.</p>
+          </article>
+        </aside>
+      </div>
+    </section>
+    <!-- КАЛЕНДАРЬ -->
+    <section id="tab-calendar" class="tab-content">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">04 — Полный журнал</p>
+          <h2 class="display-lg">Календарь посещаемости</h2>
+        </div>
+        <div class="cal-toolbar">
+          <button type="button" class="icon-btn" onclick="shiftMonth(-1)" aria-label="Предыдущий месяц"><svg class="icon" aria-hidden="true"><use href="#i-chevron-left"></use></svg></button>
+          <p class="cal-month" id="cal-month">Ноябрь 2026</p>
+          <button type="button" class="icon-btn" onclick="shiftMonth(1)" aria-label="Следующий месяц"><svg class="icon" aria-hidden="true"><use href="#i-chevron-right"></use></svg></button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="goToday()">Сегодня</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <article class="panel lg:col-span-8">
+          <div class="cal-weekdays" aria-hidden="true">
+            <span class="cal-weekday">Пн</span><span class="cal-weekday">Вт</span><span class="cal-weekday">Ср</span><span class="cal-weekday">Чт</span><span class="cal-weekday">Пт</span><span class="cal-weekday">Сб</span><span class="cal-weekday">Вс</span>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <span class="legend-item"><span class="legend-swatch s-was"></span>Посещение</span>
+            <span class="legend-item"><span class="legend-swatch s-skip"></span>Пропуск</span>
+            <span class="legend-item"><span class="legend-swatch"></span>Ожидает отметки</span>
+            <span class="legend-item"><span class="legend-swatch s-none"></span>Нет пар</span>
+          </div>
+        </article>
+        <div class="lg:col-span-4 space-y-5">
+          <article class="panel panel-dark" id="cal-detail-panel">
+            <p class="eyebrow" id="cal-detail-eyebrow">Выбранный день</p>
+            <h3 class="display-md mt-2" id="cal-detail-title">19 ноября</h3>
+            <p class="week-note" id="cal-detail-sub"></p>
+            <div class="rule"></div>
+            <div id="cal-detail-lessons"></div>
+          </article>
+          <article class="panel panel-pink">
+            <p class="eyebrow">Итоги месяца</p>
+            <div class="cal-stats">
+              <div><span class="k" id="month-attendance">—</span><span class="l">Посещаемость</span></div>
+              <div><span class="k" id="month-skips">0</span><span class="l">Пропуски</span></div>
+              <div><span class="k" id="month-marked">0</span><span class="l">Отмечено пар</span></div>
+            </div>
+            <p class="eyebrow mt-5">Пропущенные занятия</p>
+            <div class="skip-list" id="month-skip-list"></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- КАРТОЧКИ -->
+    <section id="tab-cards" class="tab-content">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">05 — Память</p>
+          <h2 class="display-lg">Карточки памяти</h2>
+        </div>
+        <span class="tag" id="card-counter">01 / 06</span>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <div class="lg:col-span-8">
+          <div id="flash-stage"></div>
+          <div class="flash-actions" id="flash-actions"></div>
+          <div id="flash-note-slot"></div>
+        </div>
+        <aside class="lg:col-span-4 space-y-5">
+          <article class="panel panel-dark">
+            <p class="eyebrow">Сессия</p>
+            <div class="progress"><i id="card-progress-bar"></i></div>
+            <div class="flex justify-between text-[9px] uppercase tracking-widest opacity-60"><span>Прогресс</span><span id="card-progress-pct">0%</span></div>
+            <div class="mt-4">
+              <div class="flash-side-row"><span>Отвечено</span><span id="card-answered">0 из 6</span></div>
+              <div class="flash-side-row"><span>Помню</span><span id="card-known">0</span></div>
+              <div class="flash-side-row"><span>К повторению</span><span id="card-repeat">0</span></div>
+            </div>
+            <button type="button" class="btn btn-outline btn-sm btn-block mt-4" onclick="resetCards()"><svg class="icon" aria-hidden="true"><use href="#i-refresh"></use></svg>Сбросить прогресс</button>
+          </article>
+          <article class="panel">
+            <p class="eyebrow">Что это</p>
+            <p class="week-note mt-3">Вопрос на карточке — проверьте себя. Если не помните ответ, нажмите «Не помню»: карточка перевернётся и покажет правильный ответ. Такие вопросы попадут в список повторения.</p>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ИИ -->
+    <section id="tab-ai" class="tab-content">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">06 — Поддержка</p>
+          <h2 class="display-lg">ИИ-репетитор</h2>
+        </div>
+        <span class="tag" id="ai-connection">Демо-режим</span>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <article class="panel lg:col-span-8 flex flex-col">
+          <div class="chat-box" id="chat-box" aria-live="polite">
+            <div class="msg msg-ai"><span class="msg-label">ИИ-репетитор</span><span id="ai-welcome">Здравствуйте. Я встроенный репетитор: разберу тему, помогу с кодом или конспектом. Спрашивайте коротко и по делу.</span></div>
+          </div>
+          <form class="chat-form" onsubmit="sendAI(); return false;">
+            <input type="text" id="ai-input" class="chat-input" placeholder="Задайте вопрос по учёбе…" autocomplete="off" aria-label="Вопрос ИИ-репетитору">
+            <button type="submit" id="ai-send" class="btn btn-dark" aria-label="Отправить вопрос"><svg class="icon" aria-hidden="true"><use href="#i-send"></use></svg><span class="send-label">Спросить</span></button>
+          </form>
+        </article>
+        <aside class="space-y-5 lg:col-span-4">
+          <article class="panel panel-dark">
+            <p class="eyebrow">Подключение</p>
+            <div class="field mt-4">
+              <label for="ai-model-select">Модель</label>
+              <select id="ai-model-select" class="select">
+                <option value="gemini-3.8-flash">3.8 Flash</option>
+                <option value="gemini-3.5-flash-lite">3.5 Flash-Lite</option>
+                <option value="gemini-2.5-flash">2.5 Flash</option>
+              </select>
+            </div>
+            <button type="button" class="btn btn-outline btn-block mt-3" onclick="promptApiKey()"><svg class="icon" aria-hidden="true"><use href="#i-key"></use></svg>Ключ API</button>
+            <p class="week-note">Ключ Google AI Studio хранится только в этом браузере. Без ключа остальные разделы работают полностью.</p>
+          </article>
+          <article class="panel panel-pink">
+            <p class="eyebrow">Быстрые вопросы</p>
+            <div class="space-y-2 mt-4">
+              <button type="button" class="quick-btn" onclick="quickAsk('Объясни указатели в C++ простыми словами')"><span>Указатели в C++</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+              <button type="button" class="quick-btn" onclick="quickAsk('Как составить план диплома по ИСП?')"><span>План диплома</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+              <button type="button" class="quick-btn" onclick="quickAsk('Чем INNER JOIN отличается от LEFT JOIN?')"><span>INNER и LEFT JOIN</span><svg class="icon" aria-hidden="true"><use href="#i-arrow-right"></use></svg></button>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>Аудитория — студенческий планер</span>
+    <div class="footer-meta"><span>Осенний семестр 2026</span><span>Данные хранятся в браузере</span></div>
+  </footer>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-backdrop" data-close="modal"></div>
+  <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <button type="button" class="modal-close" data-close="modal" aria-label="Закрыть"><svg class="icon" aria-hidden="true"><use href="#i-x"></use></svg></button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<noscript><p style="padding:20px;text-align:center">Для работы планера включите JavaScript.</p></noscript>
+<script>
+'use strict';
+
+/* ================== ХРАНИЛИЩЕ ================== */
+const STORE_PREFIX = 'auditoria_';
+function load(key, fallback) {
+  try {
+    const raw = localStorage.getItem(STORE_PREFIX + key);
+    return raw === null ? fallback : JSON.parse(raw);
+  } catch (error) { return fallback; }
+}
+function save(key, value) {
+  try { localStorage.setItem(STORE_PREFIX + key, JSON.stringify(value)); } catch (error) { /* приватный режим */ }
+}
+
+/* ================== УТИЛИТЫ ================== */
+const $ = id => document.getElementById(id);
+const MONTHS_GEN = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+const MONTHS_NOM = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+const WEEKDAYS_FULL = ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const WEEKDAYS_SHORT = ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'];
+const DAY_KEYS = ['Пн','Вт','Ср','Чт','Пт','Сб'];
+
+function plural(n, forms) {
+  const abs = Math.abs(n) % 100;
+  const last = abs % 10;
+  if (abs > 10 && abs < 20) return forms[2];
+  if (last > 1 && last < 5) return forms[1];
+  if (last === 1) return forms[0];
+  return forms[2];
+}
+function pad(n) { return String(n).padStart(2, '0'); }
+function toISO(date) { return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' + pad(date.getDate()); }
+function fromISO(iso) {
+  const parts = String(iso).split('-').map(Number);
+  return new Date(parts[0], parts[1] - 1, parts[2]);
+}
+function startOfDay(date) { return new Date(date.getFullYear(), date.getMonth(), date.getDate()); }
+function addDays(date, n) {
+  const result = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  result.setDate(result.getDate() + n);
+  return result;
+}
+function mondayOf(date) {
+  const base = startOfDay(date);
+  return addDays(base, -((base.getDay() + 6) % 7));
+}
+function formatDay(date) { return date.getDate() + ' ' + MONTHS_GEN[date.getMonth()]; }
+function capitalize(text) { return text.charAt(0).toUpperCase() + text.slice(1); }
+function formatRange(start, end) {
+  if (start.getMonth() === end.getMonth()) {
+    return start.getDate() + ' — ' + end.getDate() + ' ' + MONTHS_GEN[end.getMonth()];
+  }
+  return start.getDate() + ' ' + MONTHS_GEN[start.getMonth()] + ' — ' + end.getDate() + ' ' + MONTHS_GEN[end.getMonth()];
+}
+function el(tag, className, text) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+function icon(name) { return '<svg class="icon" aria-hidden="true"><use href="#i-' + name + '"></use></svg>'; }
+function relativeDate(iso) {
+  const date = startOfDay(new Date(iso));
+  const today = startOfDay(new Date());
+  const diff = Math.round((today - date) / 86400000);
+  if (isNaN(diff)) return '';
+  if (diff <= 0) return 'сегодня';
+  if (diff === 1) return 'вчера';
+  if (diff < 7) return diff + ' ' + plural(diff, ['день','дня','дней']) + ' назад';
+  return formatDay(date);
+}
+
+/* ================== РАСПИСАНИЕ ================== */
+const SCHEDULE = {
+  num: {
+    'Пн': [
+      { time: '08:30 — 10:00', name: 'Высшая математика', room: 'Ауд. 201', type: 'Лекция' },
+      { time: '10:10 — 11:40', name: 'Информатика', room: 'Ауд. 304', type: 'Практика' }
+    ],
+    'Вт': [
+      { time: '08:30 — 10:00', name: 'Базы данных', room: 'Ауд. 210', type: 'Практика' },
+      { time: '10:10 — 11:40', name: 'Разработка веб-приложений', room: 'Ауд. 304', type: 'Лаборатория' },
+      { time: '12:10 — 13:40', name: 'Физическая культура', room: 'Спортзал', type: 'Практика' }
+    ],
+    'Ср': [
+      { time: '08:30 — 10:00', name: 'Разработка веб-приложений', room: 'Ауд. 304', type: 'Лекция' },
+      { time: '10:10 — 11:40', name: 'Базы данных', room: 'Ауд. 210', type: 'Практика' },
+      { time: '12:10 — 13:40', name: 'Теория вероятностей', room: 'Ауд. 118', type: 'Лекция' }
+    ],
+    'Чт': [
+      { time: '08:30 — 10:00', name: 'Высшая математика', room: 'Ауд. 201', type: 'Практика' },
+      { time: '10:10 — 11:40', name: 'История', room: 'Ауд. 105', type: 'Семинар' }
+    ],
+    'Пт': [
+      { time: '10:10 — 11:40', name: 'Информатика', room: 'Ауд. 304', type: 'Лаборатория' },
+      { time: '12:10 — 13:40', name: 'Теория вероятностей', room: 'Ауд. 118', type: 'Практика' }
+    ],
+    'Сб': [
+      { time: '08:30 — 10:00', name: 'Физическая культура', room: 'Спортзал', type: 'Практика' }
+    ]
+  },
+  den: {
+    'Пн': [
+      { time: '08:30 — 10:00', name: 'Информатика', room: 'Ауд. 306', type: 'Лаборатория' },
+      { time: '10:10 — 11:40', name: 'Высшая математика', room: 'Ауд. 201', type: 'Практика' },
+      { time: '12:10 — 13:40', name: 'История', room: 'Ауд. 105', type: 'Семинар' }
+    ],
+    'Вт': [
+      { time: '08:30 — 10:00', name: 'Разработка веб-приложений', room: 'Ауд. 304', type: 'Практика' },
+      { time: '10:10 — 11:40', name: 'Базы данных', room: 'Ауд. 210', type: 'Лаборатория' }
+    ],
+    'Ср': [
+      { time: '08:30 — 10:00', name: 'Теория вероятностей', room: 'Ауд. 118', type: 'Практика' },
+      { time: '10:10 — 11:40', name: 'Разработка веб-приложений', room: 'Ауд. 304', type: 'Лаборатория' },
+      { time: '12:10 — 13:40', name: 'Базы данных', room: 'Ауд. 210', type: 'Лекция' }
+    ],
+    'Чт': [
+      { time: '08:30 — 10:00', name: 'Высшая математика', room: 'Ауд. 201', type: 'Лекция' },
+      { time: '10:10 — 11:40', name: 'Физическая культура', room: 'Спортзал', type: 'Практика' }
+    ],
+    'Пт': [
+      { time: '10:10 — 11:40', name: 'Разработка веб-приложений', room: 'Ауд. 304', type: 'Практика' }
+    ],
+    'Сб': [
+      { time: '08:30 — 10:00', name: 'Информатика', room: 'Ауд. 306', type: 'Практика' }
+    ]
+  }
+};
+
+const SEMESTER_START = new Date(2026, 8, 1);
+function parityFor(date) {
+  const weeks = Math.round((mondayOf(date) - mondayOf(SEMESTER_START)) / (7 * 86400000));
+  return ((weeks % 2) + 2) % 2 === 0 ? 'num' : 'den';
+}
+function parityLabel(date) { return parityFor(date) === 'num' ? 'Числитель' : 'Знаменатель'; }
+function lessonsForDate(date) {
+  const key = WEEKDAYS_SHORT[date.getDay()];
+  if (!key || key === 'Вс') return [];
+  return (SCHEDULE[parityFor(date)] && SCHEDULE[parityFor(date)][key]) || [];
+}
+function attKey(date, index) { return toISO(date) + '|' + index; }
+
+/* ================== СОСТОЯНИЕ ================== */
+const now = new Date();
+const state = {
+  tab: 'home',
+  subject: null,
+  weekStart: mondayOf(now),
+  selectedDate: toISO(now),
+  calMonth: new Date(now.getFullYear(), now.getMonth(), 1),
+  aiBusy: false
+};
+
+/* ================== ДАННЫЕ ================== */
+function seedNotes() {
+  function ago(days) { return addDays(new Date(), -days).toISOString(); }
+  return [
+    { id: 'n1', subject: 'Информатика', title: 'Алгоритмы поиска', date: ago(1),
+      text: 'Линейный поиск перебирает элементы по одному: O(n). Бинарный поиск делит отсортированный массив пополам и отбрасывает половину: O(log n).\n\nОбязательное условие бинарного поиска — массив должен быть отсортирован заранее. Иначе алгоритм не сможет определить, в какую сторону двигаться.' },
+    { id: 'n2', subject: 'Информатика', title: 'Инкапсуляция в ООП', date: ago(4),
+      text: 'Инкапсуляция — это объединение данных и методов их обработки в одном классе с сокрытием внутренней реализации.\n\nСнаружи доступен только публичный интерфейс. В C# это реализуется модификаторами private и public, а доступ к полям — через свойства.' },
+    { id: 'n3', subject: 'Высшая математика', title: 'Пределы функций', date: ago(2),
+      text: 'Предел функции в точке — значение, к которому стремится функция при приближении аргумента к этой точке.\n\nЗапись lim(x→a) f(x) = b означает: для любого ε > 0 найдётся δ > 0 такое, что при 0 < |x − a| < δ выполняется |f(x) − b| < ε.' },
+    { id: 'n4', subject: 'Высшая математика', title: 'Производная и её смысл', date: ago(9),
+      text: 'Производная показывает скорость изменения функции. Геометрически это наклон касательной к графику в данной точке.\n\nПравила: (u + v)\' = u\' + v\', (uv)\' = u\'v + uv\', (u/v)\' = (u\'v − uv\') / v².' },
+    { id: 'n5', subject: 'Базы данных', title: 'Нормальные формы', date: ago(3),
+      text: 'Первая нормальная форма (1НФ): все атрибуты атомарны, нет повторяющихся групп.\n\nВторая (2НФ): выполнена 1НФ и каждый неключевой атрибут зависит от всего первичного ключа, а не от его части.\n\nТретья (3НФ): выполнена 2НФ и нет транзитивных зависимостей между неключевыми атрибутами.' }
+  ];
+}
+
+function seedDeadlines() {
+  const today = startOfDay(new Date());
+  return [
+    { id: 'd1', title: 'Лабораторная работа №3', subject: 'C#', date: toISO(addDays(today, 1)), time: '23:59' },
+    { id: 'd2', title: 'Конспект по пределам', subject: 'Высшая математика', date: toISO(addDays(today, 4)), time: '12:00' },
+    { id: 'd3', title: 'Эссе по истории', subject: 'История', date: toISO(addDays(today, 8)), time: '18:00' }
+  ];
+}
+
+function seedAttendance() {
+  const map = {};
+  const today = startOfDay(new Date());
+  const from = addDays(today, -34);
+  const start = from < SEMESTER_START ? SEMESTER_START : from;
+  for (let date = new Date(start); date < today; date = addDays(date, 1)) {
+    const lessons = lessonsForDate(date);
+    lessons.forEach((lesson, index) => {
+      const day = date.getDate();
+      let status = 'was';
+      if (day % 9 === 0 && index === lessons.length - 1) status = 'skip';
+      else if (day % 14 === 0 && index === 0) status = 'skip';
+      map[attKey(date, index)] = status;
+    });
+  }
+  return map;
+}
+
+let subjects = load('subjects', null);
+if (!Array.isArray(subjects) || !subjects.length) subjects = ['Информатика', 'Высшая математика', 'Базы данных'];
+
+let notes = load('notes', null);
+if (!Array.isArray(notes)) { notes = seedNotes(); save('notes', notes); }
+
+let deadlines = load('deadlines', null);
+if (!Array.isArray(deadlines)) { deadlines = seedDeadlines(); save('deadlines', deadlines); }
+
+let profile = load('profile', null);
+if (!profile || typeof profile !== 'object' || Array.isArray(profile)) profile = { name: '' };
+
+let attendance = load('attendance', null);
+if (!attendance || typeof attendance !== 'object') { attendance = seedAttendance(); save('attendance', attendance); }
+
+let dayNotes = load('day-notes', null);
+if (!dayNotes || typeof dayNotes !== 'object') dayNotes = {};
+
+state.subject = subjects[0];
+
+/* ================== НАВИГАЦИЯ ================== */
+const TABS = ['home', 'subjects', 'schedule', 'calendar', 'cards', 'ai'];
+function switchTab(id) {
+  if (!TABS.includes(id)) return;
+  state.tab = id;
+  document.querySelectorAll('.tab-content').forEach(section => {
+    section.classList.toggle('active', section.id === 'tab-' + id);
+  });
+  document.querySelectorAll('.nav-btn').forEach(button => {
+    const active = button.dataset.tab === id;
+    button.classList.toggle('active', active);
+    if (active) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
+  if (id === 'calendar') { renderCalendar(); renderCalDetail(); }
+  if (id === 'ai') {
+    const box = $('chat-box');
+    if (box) box.scrollTop = box.scrollHeight;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ================== СТАТУСЫ ================== */
+const ATT = {
+  pending: { label: 'Отметить', icon: 'clock' },
+  was: { label: 'Был', icon: 'check' },
+  skip: { label: 'Пропуск', icon: 'x' }
+};
+function statusOf(date, index) { return attendance[attKey(date, index)] || 'pending'; }
+function cycleAttendance(date, index) {
+  const key = attKey(date, index);
+  const order = ['pending', 'was', 'skip'];
+  const current = attendance[key] || 'pending';
+  attendance[key] = order[(order.indexOf(current) + 1) % order.length];
+  save('attendance', attendance);
+  renderHome();
+  renderWeek();
+  renderDayPanel();
+  renderCalendar();
+  renderCalDetail();
+}
+
+function buildLessonRow(lesson, date, index) {
+  const row = el('div', 'lesson');
+  row.appendChild(el('span', 'lesson-index', pad(index + 1)));
+  const info = el('div', 'min-w-0');
+  info.appendChild(el('div', 'lesson-name', lesson.name));
+  info.appendChild(el('div', 'lesson-meta', lesson.time + ' · ' + lesson.room + ' · ' + lesson.type));
+  row.appendChild(info);
+
+  const status = statusOf(date, index);
+  const button = el('button', 'att-btn att-' + status, '');
+  button.type = 'button';
+  button.innerHTML = icon(ATT[status].icon) + '<span>' + ATT[status].label + '</span>';
+  button.setAttribute('aria-label', lesson.name + ': ' + ATT[status].label + '. Нажмите, чтобы изменить отметку');
+  button.addEventListener('click', () => cycleAttendance(date, index));
+  row.appendChild(button);
+  return row;
+}
+
+/* ================== ГЛАВНАЯ ================== */
+function overallStats() {
+  const values = Object.values(attendance);
+  const was = values.filter(value => value === 'was').length;
+  const skip = values.filter(value => value === 'skip').length;
+  const marked = was + skip;
+  return { was, skip, marked, percent: marked ? Math.round((was / marked) * 100) : null };
+}
+function sortedNotes() {
+  return notes.slice().sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+function sortedDeadlines() {
+  return deadlines.slice().sort((a, b) => fromISO(a.date) - fromISO(b.date));
+}
+function deadlineDiff(dateISO) {
+  return Math.round((startOfDay(fromISO(dateISO)) - startOfDay(new Date())) / 86400000);
+}
+function deadlineBadge(diff) {
+  if (diff < 0) return { text: 'просрочен', cls: ' is-late' };
+  if (diff === 0) return { text: 'сегодня', cls: ' is-today' };
+  return { text: diff + ' ' + plural(diff, ['день', 'дня', 'дней']), cls: '' };
+}
+
+function renderHome() {
+  const today = new Date();
+  const hour = today.getHours();
+  const greeting = hour < 5 ? 'Доброй ночи' : hour < 12 ? 'Доброе утро' : hour < 18 ? 'Добрый день' : 'Добрый вечер';
+  const name = profile.name ? String(profile.name).trim() : '';
+  $('greeting').textContent = name ? greeting + ', ' + name : greeting;
+  const editLabel = $('greeting-edit-label');
+  if (editLabel) editLabel.textContent = name ? 'Изменить имя' : 'Указать имя';
+  const editButton = $('greeting-edit');
+  if (editButton) editButton.setAttribute('aria-label', name ? 'Изменить имя' : 'Указать имя');
+  const welcome = $('ai-welcome');
+  if (welcome) {
+    welcome.textContent = (name ? 'Здравствуйте, ' + name + '. ' : 'Здравствуйте. ') +
+      'Я встроенный репетитор: разберу тему, помогу с кодом или конспектом. Спрашивайте коротко и по делу.';
+  }
+
+  const todayDate = startOfDay(today);
+  const lessons = lessonsForDate(todayDate);
+  const dateLine = capitalize(WEEKDAYS_FULL[today.getDay()]) + ', ' + formatDay(today) + ' · ' +
+    (lessons.length ? lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']) + ' по расписанию' : 'пар нет');
+  $('today-line').textContent = dateLine;
+
+  const stats = overallStats();
+  $('stat-attendance').textContent = stats.percent === null ? '—' : stats.percent + '%';
+  $('stat-skips').textContent = stats.skip;
+  $('stat-deadlines').textContent = deadlines.length;
+
+  const list = $('today-list');
+  const count = $('today-count');
+  list.replaceChildren();
+  if (!lessons.length) {
+    list.appendChild(el('div', 'empty-note', 'Сегодня пар нет — день свободен для конспектов.'));
+    count.textContent = '0 пар';
+  } else {
+    lessons.forEach((lesson, index) => list.appendChild(buildLessonRow(lesson, todayDate, index)));
+    count.textContent = lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']);
+  }
+
+  const deadlineList = $('deadline-list');
+  deadlineList.replaceChildren();
+  const sorted = sortedDeadlines();
+  $('deadline-count').textContent = pad(sorted.length);
+  if (!sorted.length) {
+    deadlineList.appendChild(el('div', 'empty-note', 'Дедлайнов пока нет. Добавьте первый — он появится здесь.'));
+  }
+  sorted.forEach((item, index) => {
+    const due = fromISO(item.date);
+    const diff = deadlineDiff(item.date);
+    const badge = deadlineBadge(diff);
+    const row = el('button', 'deadline', '');
+    row.type = 'button';
+    row.setAttribute('aria-label', 'Изменить дедлайн: ' + item.title);
+    row.appendChild(el('span', 'deadline-num', pad(index + 1)));
+    const info = el('div', 'min-w-0');
+    info.appendChild(el('div', 'deadline-title', item.title));
+    const dueLabel = (diff < 0 ? 'было до ' : 'до ') + formatDay(due) + (item.time ? ', ' + item.time : '');
+    info.appendChild(el('div', 'deadline-meta', (item.subject ? item.subject + ' · ' : '') + dueLabel));
+    row.appendChild(info);
+    row.appendChild(el('span', 'deadline-badge' + badge.cls, badge.text));
+    row.addEventListener('click', () => openDeadlineEditor(item.id));
+    deadlineList.appendChild(row);
+  });
+
+  renderLatestNote();
+}
+
+function renderLatestNote() {
+  const wrap = $('latest-note');
+  wrap.replaceChildren();
+  const latest = sortedNotes()[0];
+  if (!latest) {
+    wrap.appendChild(el('p', 'week-note', 'Конспектов пока нет. Добавьте первый — он появится здесь.'));
+    const button = el('button', 'btn btn-dark btn-sm mt-4', '+ Новый конспект');
+    button.type = 'button';
+    button.addEventListener('click', () => { switchTab('subjects'); openNoteEditor(); });
+    wrap.appendChild(button);
+    return;
+  }
+  wrap.appendChild(el('div', 'latest-meta', latest.subject + ' · ' + relativeDate(latest.date)));
+  wrap.appendChild(el('h3', 'latest-title', latest.title));
+  wrap.appendChild(el('p', 'latest-excerpt', latest.text));
+  const button = el('button', 'btn btn-outline btn-sm mt-4', 'Открыть конспект');
+  button.type = 'button';
+  button.innerHTML = 'Открыть конспект ' + icon('arrow-right');
+  button.addEventListener('click', () => openNoteModal(latest.id));
+  wrap.appendChild(button);
+}
+/* ================== ПРЕДМЕТЫ И КОНСПЕКТЫ ================== */
+function renderSubjects() {
+  const list = $('subjects-list');
+  list.replaceChildren();
+  if (!subjects.length) {
+    list.appendChild(el('p', 'subject-empty', 'Предметов пока нет. Добавьте первый — и сможете вести по нему конспекты.'));
+  }
+  subjects.forEach((name, index) => {
+    const count = notes.filter(note => note.subject === name).length;
+    const row = el('div', 'subject-row');
+    const card = el('button', 'subject-card' + (name === state.subject ? ' active' : ''), '');
+    card.type = 'button';
+    card.setAttribute('aria-pressed', name === state.subject ? 'true' : 'false');
+    card.appendChild(el('span', 'num', pad(index + 1)));
+    card.appendChild(el('span', 'name', name));
+    card.appendChild(el('span', 'meta', count + ' ' + plural(count, ['конспект', 'конспекта', 'конспектов'])));
+    card.addEventListener('click', () => selectSubject(name));
+    const tools = el('div', 'subject-tools');
+    const edit = el('button', 'subject-tool', '');
+    edit.type = 'button';
+    edit.title = 'Изменить предмет';
+    edit.setAttribute('aria-label', 'Изменить предмет ' + name);
+    edit.innerHTML = icon('pen');
+    edit.addEventListener('click', () => openSubjectEditor(name));
+    const remove = el('button', 'subject-tool is-danger', '');
+    remove.type = 'button';
+    remove.title = 'Удалить предмет';
+    remove.setAttribute('aria-label', 'Удалить предмет ' + name);
+    remove.innerHTML = icon('trash');
+    remove.addEventListener('click', () => deleteSubject(name));
+    tools.append(edit, remove);
+    row.append(card, tools);
+    list.appendChild(row);
+  });
+  const add = el('button', 'subject-card subject-add', '');
+  add.type = 'button';
+  add.innerHTML = icon('plus') + '<span>Добавить предмет</span>';
+  add.addEventListener('click', openSubjectEditor);
+  list.appendChild(add);
+  list.appendChild(el('p', 'subject-hint', 'Карандаш — изменить, корзина — удалить'));
+}
+
+function renderNotes() {
+  const list = $('notes-list');
+  const title = $('subject-title');
+  list.replaceChildren();
+  title.textContent = state.subject || 'Конспекты';
+  if (!subjects.length) {
+    list.appendChild(el('div', 'empty-note', 'Сначала добавьте предмет — конспекты хранятся внутри предметов.'));
+    const addSubject = el('button', 'btn btn-dark btn-sm mt-4', 'Добавить предмет');
+    addSubject.type = 'button';
+    addSubject.addEventListener('click', openSubjectEditor);
+    list.appendChild(addSubject);
+    return;
+  }
+  const items = sortedNotes().filter(note => note.subject === state.subject);
+  if (!items.length) {
+    const empty = el('div', 'empty-note', 'В этом предмете пока нет конспектов. Добавьте первый — его можно будет открыть и дополнить.');
+    list.appendChild(empty);
+    const button = el('button', 'btn btn-dark btn-sm mt-4', '+ Добавить конспект');
+    button.type = 'button';
+    button.addEventListener('click', openNoteEditor);
+    list.appendChild(button);
+    return;
+  }
+  items.forEach(note => {
+    const card = el('button', 'note-card', '');
+    card.type = 'button';
+    const main = el('div', 'min-w-0');
+    main.appendChild(el('div', 'note-date', relativeDate(note.date)));
+    main.appendChild(el('div', 'note-title', note.title));
+    const excerpt = el('p', 'note-excerpt', note.text.replace(/\s+/g, ' '));
+    card.append(main, el('span', 'note-open', 'Открыть'));
+    card.appendChild(excerpt);
+    card.addEventListener('click', () => openNoteModal(note.id));
+    list.appendChild(card);
+  });
+}
+
+function selectSubject(name) {
+  state.subject = name;
+  renderSubjects();
+  renderNotes();
+}
+
+function deleteSubject(name) {
+  if (!subjects.includes(name)) return false;
+  const count = notes.filter(note => note.subject === name).length;
+  const suffix = count
+    ? ' Вместе с ним удалятся ' + count + ' ' + plural(count, ['конспект', 'конспекта', 'конспектов']) + '.'
+    : '';
+  if (!window.confirm('Удалить предмет «' + name + '»?' + suffix)) return false;
+  subjects = subjects.filter(item => item !== name);
+  notes = notes.filter(note => note.subject !== name);
+  save('subjects', subjects);
+  save('notes', notes);
+  if (state.subject === name) state.subject = subjects[0] || '';
+  renderSubjects();
+  renderNotes();
+  renderHome();
+  return true;
+}
+
+function openSubjectEditor(name) {
+  const existing = typeof name === 'string' && subjects.includes(name) ? name : null;
+  openModal(body => {
+    body.appendChild(el('p', 'eyebrow', existing ? 'Редактирование' : 'Новый предмет'));
+    body.appendChild(el('h3', 'display-md mt-2', existing ? 'Изменить предмет' : 'Добавить предмет'));
+    const form = el('form', 'mt-5');
+    const field = el('div', 'field');
+    const label = el('label', '', 'Название');
+    label.setAttribute('for', 'subject-name');
+    const input = el('input', 'input');
+    input.id = 'subject-name';
+    input.type = 'text';
+    input.placeholder = 'Например, Теория вероятностей';
+    input.autocomplete = 'off';
+    input.dataset.autofocus = 'true';
+    input.value = existing || '';
+    field.append(label, input);
+    const hint = el('p', 'field-hint', existing
+      ? 'Название обновится во всех конспектах этого предмета.'
+      : 'Предмет появится в списке и в форме нового конспекта.');
+    const error = el('p', 'form-error', '');
+    error.hidden = true;
+    const actions = el('div', 'modal-actions');
+    if (existing) {
+      const remove = el('button', 'btn btn-outline btn-sm', '');
+      remove.type = 'button';
+      remove.innerHTML = icon('trash') + '<span>Удалить</span>';
+      remove.addEventListener('click', () => {
+        if (deleteSubject(existing)) closeModal();
+      });
+      actions.appendChild(remove);
+    }
+    const right = el('div', 'modal-actions-right');
+    const cancel = el('button', 'btn btn-outline btn-sm', 'Отмена');
+    cancel.type = 'button';
+    cancel.addEventListener('click', closeModal);
+    const submit = el('button', 'btn btn-dark btn-sm', existing ? 'Сохранить' : 'Добавить');
+    submit.type = 'submit';
+    right.append(cancel, submit);
+    actions.appendChild(right);
+    form.append(field, hint, error, actions);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const value = input.value.trim();
+      if (!value) { error.textContent = 'Введите название предмета.'; error.hidden = false; input.focus(); return; }
+      const clash = subjects.some(item => item !== existing && item.toLowerCase() === value.toLowerCase());
+      if (clash) { error.textContent = 'Такой предмет уже есть в списке.'; error.hidden = false; input.focus(); return; }
+      if (existing) {
+        if (value !== existing) {
+          subjects = subjects.map(item => item === existing ? value : item);
+          notes = notes.map(note => note.subject === existing ? Object.assign({}, note, { subject: value }) : note);
+          if (state.subject === existing) state.subject = value;
+          save('subjects', subjects);
+          save('notes', notes);
+        }
+      } else {
+        subjects.push(value);
+        save('subjects', subjects);
+        state.subject = value;
+      }
+      renderSubjects();
+      renderNotes();
+      renderHome();
+      closeModal();
+    });
+    body.appendChild(form);
+    setTimeout(() => { input.focus(); input.select(); }, 30);
+  });
+}
+
+function openNoteEditor() {
+  if (!subjects.length) {
+    openSubjectEditor();
+    return;
+  }
+  openModal(body => {
+    body.appendChild(el('p', 'eyebrow', 'Новый конспект'));
+    body.appendChild(el('h3', 'display-md mt-2', 'Добавить конспект'));
+    const form = el('form', 'mt-5 space-y-4');
+
+    const subjectField = el('div', 'field');
+    const subjectLabel = el('label', '', 'Предмет');
+    subjectLabel.setAttribute('for', 'note-subject');
+    const select = el('select', 'select');
+    select.id = 'note-subject';
+    subjects.forEach(name => {
+      const option = el('option', '', name);
+      option.value = name;
+      if (name === state.subject) option.selected = true;
+      select.appendChild(option);
+    });
+    subjectField.append(subjectLabel, select);
+
+    const titleField = el('div', 'field');
+    const titleLabel = el('label', '', 'Заголовок');
+    titleLabel.setAttribute('for', 'note-title');
+    const titleInput = el('input', 'input');
+    titleInput.id = 'note-title';
+    titleInput.type = 'text';
+    titleInput.placeholder = 'О чём конспект';
+    titleInput.autocomplete = 'off';
+    titleInput.dataset.autofocus = 'true';
+    titleField.append(titleLabel, titleInput);
+
+    const textField = el('div', 'field');
+    const textLabel = el('label', '', 'Текст');
+    textLabel.setAttribute('for', 'note-text');
+    const textInput = el('textarea', 'textarea');
+    textInput.id = 'note-text';
+    textInput.rows = 8;
+    textInput.placeholder = 'Определения, формулы, примеры…';
+    textField.append(textLabel, textInput);
+
+    const error = el('p', 'form-error', '');
+    error.hidden = true;
+
+    const actions = el('div', 'modal-actions');
+    const cancel = el('button', 'btn btn-outline', 'Отмена');
+    cancel.type = 'button';
+    cancel.addEventListener('click', closeModal);
+    const submit = el('button', 'btn btn-dark', 'Сохранить');
+    submit.type = 'submit';
+    actions.append(cancel, submit);
+
+    form.append(subjectField, titleField, textField, error, actions);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = titleInput.value.trim();
+      const text = textInput.value.trim();
+      if (!title || !text) {
+        error.textContent = 'Заполните заголовок и текст конспекта.';
+        error.hidden = false;
+        return;
+      }
+      const subject = select.value;
+      notes.unshift({ id: 'n' + Date.now(), subject: subject, title: title, text: text, date: new Date().toISOString() });
+      save('notes', notes);
+      if (!subjects.includes(subject)) { subjects.push(subject); save('subjects', subjects); }
+      state.subject = subject;
+      renderSubjects();
+      renderNotes();
+      renderHome();
+      closeModal();
+    });
+    body.appendChild(form);
+    setTimeout(() => titleInput.focus(), 30);
+  });
+}
+
+function openNoteModal(id) {
+  const note = notes.find(item => String(item.id) === String(id));
+  if (!note) return;
+  openModal(body => {
+    body.appendChild(el('p', 'eyebrow', note.subject + ' · ' + relativeDate(note.date)));
+    const title = el('h3', 'display-md mt-2', note.title);
+    title.id = 'modal-title';
+    body.appendChild(title);
+    const rule = el('div', 'rule');
+    body.appendChild(rule);
+    const noteBody = el('p', 'note-body', note.text);
+    body.appendChild(noteBody);
+
+    const aiPanel = el('div', 'note-ai');
+    aiPanel.hidden = true;
+    const aiHead = el('div', 'note-ai-head');
+    aiHead.appendChild(el('p', 'eyebrow', 'Выжимка ИИ'));
+    aiHead.appendChild(el('span', 'note-ai-model', MODEL_LABELS[AI_CONFIG.model] || AI_CONFIG.model));
+    const aiBody = el('div', 'note-ai-body', '');
+    const aiError = el('p', 'note-ai-error', '');
+    aiError.hidden = true;
+    const aiActions = el('div', 'note-ai-actions');
+    const insert = el('button', 'btn btn-dark btn-sm', 'Вставить в конспект');
+    insert.type = 'button';
+    const copy = el('button', 'btn btn-outline btn-sm', 'Скопировать');
+    copy.type = 'button';
+    aiActions.append(insert, copy);
+    aiPanel.append(aiHead, aiBody, aiError, aiActions);
+    body.appendChild(aiPanel);
+
+    let summaryText = '';
+
+    const actions = el('div', 'modal-actions');
+    const remove = el('button', 'btn btn-outline btn-sm', '');
+    remove.type = 'button';
+    remove.innerHTML = icon('trash') + '<span>Удалить</span>';
+    remove.addEventListener('click', () => {
+      if (!window.confirm('Удалить этот конспект? Действие нельзя отменить.')) return;
+      notes = notes.filter(item => String(item.id) !== String(note.id));
+      save('notes', notes);
+      renderSubjects();
+      renderNotes();
+      renderHome();
+      closeModal();
+    });
+    const right = el('div', 'modal-actions-right');
+    const summary = el('button', 'btn btn-outline btn-sm', '');
+    summary.type = 'button';
+    summary.innerHTML = icon('spark') + '<span>Сделать выжимку</span>';
+    summary.addEventListener('click', async () => {
+      if (summary.disabled) return;
+      aiPanel.hidden = false;
+      aiError.hidden = true;
+      aiActions.hidden = true;
+      summaryText = '';
+      if (!hasApiKey()) {
+        aiBody.textContent = '';
+        aiError.textContent = 'ИИ не подключён. Вставьте ключ API в разделе «Репетитор» — и выжимка появится здесь.';
+        aiError.hidden = false;
+        return;
+      }
+      aiPanel.classList.add('is-loading');
+      aiBody.textContent = 'Готовлю краткую выжимку…';
+      summary.disabled = true;
+      const label = summary.querySelector('span');
+      if (label) label.textContent = 'Готовлю выжимку…';
+      try {
+        summaryText = await summarizeNote(note);
+        aiBody.textContent = summaryText;
+        aiActions.hidden = false;
+        insert.disabled = false;
+        insert.textContent = 'Вставить в конспект';
+        copy.textContent = 'Скопировать';
+      } catch (error) {
+        console.error(error);
+        aiBody.textContent = '';
+        aiError.textContent = describeAiError(error);
+        aiError.hidden = false;
+      } finally {
+        aiPanel.classList.remove('is-loading');
+        summary.disabled = false;
+        if (label) label.textContent = 'Сделать выжимку';
+      }
+    });
+    insert.addEventListener('click', () => {
+      if (!summaryText) return;
+      note.text = note.text.replace(/\s+$/, '') + '\n\nВыжимка:\n' + summaryText;
+      noteBody.textContent = note.text;
+      save('notes', notes);
+      renderNotes();
+      insert.disabled = true;
+      insert.textContent = 'Добавлено';
+      insert.classList.remove('btn-dark');
+      insert.classList.add('btn-outline');
+    });
+    copy.addEventListener('click', async () => {
+      if (!summaryText) return;
+      try {
+        await navigator.clipboard.writeText(summaryText);
+        copy.textContent = 'Скопировано';
+      } catch (error) {
+        const area = document.createElement('textarea');
+        area.value = summaryText;
+        area.style.position = 'fixed';
+        area.style.opacity = '0';
+        document.body.appendChild(area);
+        area.select();
+        try { document.execCommand('copy'); copy.textContent = 'Скопировано'; }
+        catch (copyError) { copy.textContent = 'Не удалось'; }
+        area.remove();
+      }
+    });
+    const ask = el('button', 'btn btn-dark btn-sm', '');
+    ask.type = 'button';
+    ask.innerHTML = icon('spark') + '<span>Спросить ИИ</span>';
+    ask.addEventListener('click', () => {
+      closeModal();
+      askAI('Объясни простыми словами конспект «' + note.title + '»: ' + note.text);
+    });
+    const close = el('button', 'btn btn-outline btn-sm', 'Закрыть');
+    close.type = 'button';
+    close.addEventListener('click', closeModal);
+    right.append(summary, ask, close);
+    actions.append(remove, right);
+    body.appendChild(actions);
+  });
+}
+
+async function summarizeNote(note) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+  try {
+    const response = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(AI_CONFIG.model) + ':generateContent',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': AI_CONFIG.apiKey },
+        body: JSON.stringify({
+          systemInstruction: {
+            parts: [{ text: 'Ты — редактор студенческих конспектов. Делай короткие и точные выжимки без воды. Пиши по-русски, только по делу.' }]
+          },
+          contents: [{
+            role: 'user',
+            parts: [{
+              text: 'Сделай краткую выжимку конспекта: 3–6 пунктов, только ключевые мысли, термины, формулы и определения. ' +
+                'Оформи маркированным списком, каждый пункт начинай с «— ». Не добавляй вступление, выводы и обращения.\n\n' +
+                'Предмет: ' + note.subject + '\nТема: ' + note.title + '\n\nТекст конспекта:\n' + note.text
+            }]
+          }],
+          generationConfig: { thinkingConfig: buildThinkingConfig() }
+        }),
+        signal: controller.signal
+      }
+    );
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      const apiMessage = data && data.error && data.error.message ? data.error.message : 'HTTP ' + response.status;
+      const apiError = new Error(apiMessage);
+      apiError.status = response.status;
+      throw apiError;
+    }
+    const data = await response.json();
+    const parts = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts;
+    const text = Array.isArray(parts)
+      ? parts.filter(part => part && !part.thought).map(part => part.text || '').join('').trim()
+      : '';
+    if (!text) throw new Error('Пустой ответ API');
+    return text;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function describeAiError(error) {
+  const apiMessage = error && error.message ? error.message : '';
+  if (error && error.name === 'AbortError') {
+    return 'ИИ не ответил за ' + Math.round(AI_TIMEOUT_MS / 1000) + ' секунд. Попробуйте ещё раз или выберите более быструю модель в разделе «Репетитор».';
+  }
+  if (/location is not supported/i.test(apiMessage)) {
+    return 'Gemini API недоступен из вашего региона. Ключ здесь ни при чём — это ограничение Google по IP-адресу.';
+  }
+  if (/API key not valid|API_KEY_INVALID/i.test(apiMessage)) {
+    return 'Google не принял ключ API. Проверьте его в разделе «Репетитор».';
+  }
+  if (error && (error.status === 429 || /RESOURCE_EXHAUSTED|quota/i.test(apiMessage))) {
+    return 'Исчерпан лимит бесплатного тарифа. Подождите немного или переключитесь на более лёгкую модель.';
+  }
+  if (error instanceof TypeError) {
+    return 'Нет связи с сервером ИИ. Проверьте интернет и попробуйте снова.';
+  }
+  if (apiMessage && apiMessage !== 'Пустой ответ API') {
+    return 'Ошибка ИИ: ' + apiMessage;
+  }
+  return 'Не удалось сделать выжимку. Попробуйте ещё раз.';
+}
+
+function openProfileEditor() {
+  const current = profile.name || '';
+  openModal(body => {
+    body.appendChild(el('p', 'eyebrow', 'Профиль'));
+    body.appendChild(el('h3', 'display-md mt-2', current ? 'Изменить имя' : 'Как вас зовут?'));
+    const form = el('form', 'mt-5');
+    const field = el('div', 'field');
+    const label = el('label', '', 'Имя');
+    label.setAttribute('for', 'profile-name');
+    const input = el('input', 'input');
+    input.id = 'profile-name';
+    input.type = 'text';
+    input.placeholder = 'Например, Алекс';
+    input.autocomplete = 'given-name';
+    input.value = current;
+    input.dataset.autofocus = 'true';
+    field.append(label, input);
+    const hint = el('p', 'field-hint', 'Имя показывается в приветствии на главной. Оно хранится только в этом браузере — у каждого пользователя своё.');
+    const error = el('p', 'form-error', '');
+    error.hidden = true;
+    const actions = el('div', 'modal-actions');
+    if (current) {
+      const reset = el('button', 'btn btn-outline btn-sm', 'Сбросить имя');
+      reset.type = 'button';
+      reset.addEventListener('click', () => {
+        profile.name = '';
+        save('profile', profile);
+        renderHome();
+        closeModal();
+      });
+      actions.appendChild(reset);
+    }
+    const right = el('div', 'modal-actions-right');
+    const cancel = el('button', 'btn btn-outline btn-sm', 'Отмена');
+    cancel.type = 'button';
+    cancel.addEventListener('click', closeModal);
+    const submit = el('button', 'btn btn-dark btn-sm', 'Сохранить');
+    submit.type = 'submit';
+    right.append(cancel, submit);
+    actions.appendChild(right);
+    form.append(field, hint, error, actions);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const value = input.value.trim();
+      if (!value) {
+        error.textContent = 'Введите имя — оно будет показываться в приветствии.';
+        error.hidden = false;
+        input.focus();
+        return;
+      }
+      profile.name = value.slice(0, 40);
+      save('profile', profile);
+      renderHome();
+      closeModal();
+    });
+    body.appendChild(form);
+    setTimeout(() => { input.focus(); input.select(); }, 30);
+  });
+}
+
+function openDeadlineEditor(id) {
+  const existing = id ? deadlines.find(item => String(item.id) === String(id)) : null;
+  openModal(body => {
+    body.appendChild(el('p', 'eyebrow', existing ? 'Редактирование' : 'Новый дедлайн'));
+    body.appendChild(el('h3', 'display-md mt-2', existing ? 'Изменить дедлайн' : 'Добавить дедлайн'));
+
+    const form = el('form', 'mt-5 space-y-4');
+
+    const titleField = el('div', 'field');
+    const titleLabel = el('label', '', 'Название');
+    titleLabel.setAttribute('for', 'deadline-title');
+    const titleInput = el('input', 'input');
+    titleInput.id = 'deadline-title';
+    titleInput.type = 'text';
+    titleInput.placeholder = 'Например, Лабораторная работа №3';
+    titleInput.autocomplete = 'off';
+    titleInput.value = existing ? existing.title : '';
+    titleInput.dataset.autofocus = 'true';
+    titleField.append(titleLabel, titleInput);
+
+    const subjectField = el('div', 'field');
+    const subjectLabel = el('label', '', 'Предмет');
+    subjectLabel.setAttribute('for', 'deadline-subject');
+    const subjectInput = el('input', 'input');
+    subjectInput.id = 'deadline-subject';
+    subjectInput.type = 'text';
+    subjectInput.placeholder = 'Необязательно';
+    subjectInput.autocomplete = 'off';
+    subjectInput.value = existing ? (existing.subject || '') : '';
+    subjectField.append(subjectLabel, subjectInput);
+
+    const grid = el('div', 'grid grid-cols-2 gap-3');
+    const dateField = el('div', 'field');
+    const dateLabel = el('label', '', 'Дата');
+    dateLabel.setAttribute('for', 'deadline-date');
+    const dateInput = el('input', 'input');
+    dateInput.id = 'deadline-date';
+    dateInput.type = 'date';
+    dateInput.required = true;
+    dateInput.value = existing ? existing.date : toISO(addDays(new Date(), 7));
+    dateField.append(dateLabel, dateInput);
+
+    const timeField = el('div', 'field');
+    const timeLabel = el('label', '', 'Время');
+    timeLabel.setAttribute('for', 'deadline-time');
+    const timeInput = el('input', 'input');
+    timeInput.id = 'deadline-time';
+    timeInput.type = 'time';
+    timeInput.value = existing ? (existing.time || '') : '';
+    timeField.append(timeLabel, timeInput);
+    grid.append(dateField, timeField);
+
+    const error = el('p', 'form-error', '');
+    error.hidden = true;
+
+    const actions = el('div', 'modal-actions');
+    if (existing) {
+      const remove = el('button', 'btn btn-outline btn-sm', '');
+      remove.type = 'button';
+      remove.innerHTML = icon('trash') + '<span>Удалить</span>';
+      remove.addEventListener('click', () => {
+        if (!window.confirm('Удалить дедлайн «' + existing.title + '»?')) return;
+        deadlines = deadlines.filter(item => String(item.id) !== String(existing.id));
+        save('deadlines', deadlines);
+        renderHome();
+        closeModal();
+      });
+      actions.appendChild(remove);
+    }
+
+    const right = el('div', 'modal-actions-right');
+    const cancel = el('button', 'btn btn-outline btn-sm', 'Отмена');
+    cancel.type = 'button';
+    cancel.addEventListener('click', closeModal);
+    const submit = el('button', 'btn btn-dark btn-sm', 'Сохранить');
+    submit.type = 'submit';
+    right.append(cancel, submit);
+    actions.appendChild(right);
+
+    form.append(titleField, subjectField, grid, error, actions);
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+      const title = titleInput.value.trim();
+      const date = dateInput.value;
+      if (!title) {
+        error.textContent = 'Введите название дедлайна.';
+        error.hidden = false;
+        return;
+      }
+      if (!date) {
+        error.textContent = 'Выберите дату.';
+        error.hidden = false;
+        return;
+      }
+      const payload = {
+        title: title,
+        subject: subjectInput.value.trim(),
+        date: date,
+        time: timeInput.value
+      };
+      if (existing) {
+        Object.assign(existing, payload);
+      } else {
+        deadlines.push(Object.assign({ id: 'd' + Date.now() }, payload));
+      }
+      save('deadlines', deadlines);
+      renderHome();
+      closeModal();
+    });
+
+    body.appendChild(form);
+  });
+}
+
+/* ================== МОДАЛЬНОЕ ОКНО ================== */
+function openModal(build) {
+  const modal = $('modal');
+  const body = $('modal-body');
+  body.replaceChildren();
+  build(body);
+  const heading = body.querySelector('h3');
+  if (heading && !heading.id) heading.id = 'modal-title';
+  modal.hidden = false;
+  document.body.classList.add('modal-open');
+  const focusable = body.querySelector('[data-autofocus]') || modal.querySelector('.modal-close');
+  if (focusable) setTimeout(() => focusable.focus(), 30);
+}
+function closeModal() {
+  $('modal').hidden = true;
+  document.body.classList.remove('modal-open');
+}
+
+/* ================== НЕДЕЛЯ ================== */
+function renderWeek() {
+  const strip = $('day-strip');
+  strip.replaceChildren();
+  const start = state.weekStart;
+  const end = addDays(start, 5);
+  $('week-range').textContent = formatRange(start, end);
+
+  for (let offset = 0; offset < 6; offset += 1) {
+    const date = addDays(start, offset);
+    const iso = toISO(date);
+    const lessons = lessonsForDate(date);
+    const chip = el('button', 'day-chip' + (iso === state.selectedDate ? ' active' : ''), '');
+    chip.type = 'button';
+    chip.appendChild(el('span', 'dow', DAY_KEYS[offset]));
+    chip.appendChild(el('span', 'dom', String(date.getDate())));
+    chip.appendChild(el('span', 'cnt', lessons.length ? lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']) : 'нет пар'));
+    chip.setAttribute('aria-label', capitalize(WEEKDAYS_FULL[date.getDay()]) + ', ' + formatDay(date));
+    chip.addEventListener('click', () => selectDate(iso));
+    strip.appendChild(chip);
+  }
+
+  let total = 0, was = 0, skip = 0, pending = 0;
+  for (let offset = 0; offset < 6; offset += 1) {
+    const date = addDays(start, offset);
+    lessonsForDate(date).forEach((lesson, index) => {
+      total += 1;
+      const status = statusOf(date, index);
+      if (status === 'was') was += 1;
+      else if (status === 'skip') skip += 1;
+      else pending += 1;
+    });
+  }
+  $('week-lessons').textContent = total;
+  $('week-was').textContent = was;
+  $('week-skips').textContent = skip;
+  $('week-pending').textContent = pending;
+  $('week-note').textContent = pending
+    ? 'Осталось отметить ' + pending + ' ' + plural(pending, ['пару', 'пары', 'пар']) + '. Отметки попадают в календарь.'
+    : 'Все пары недели отмечены. Данные синхронизированы с календарём.';
+}
+
+function selectDate(iso) {
+  state.selectedDate = iso;
+  renderWeek();
+  renderDayPanel();
+  if (state.tab === 'calendar') {
+    const date = fromISO(iso);
+    if (date.getMonth() !== state.calMonth.getMonth() || date.getFullYear() !== state.calMonth.getFullYear()) {
+      state.calMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+    }
+    renderCalendar();
+    renderCalDetail();
+  }
+}
+
+function shiftWeek(delta) {
+  const selectedDow = (fromISO(state.selectedDate).getDay() + 6) % 7;
+  state.weekStart = addDays(state.weekStart, delta * 7);
+  const index = selectedDow > 5 ? 0 : selectedDow;
+  state.selectedDate = toISO(addDays(state.weekStart, index));
+  renderWeek();
+  renderDayPanel();
+}
+
+function renderDayPanel() {
+  const date = fromISO(state.selectedDate);
+  const lessons = lessonsForDate(date);
+  $('day-parity').textContent = parityLabel(date);
+  $('day-title').textContent = capitalize(WEEKDAYS_FULL[date.getDay()]) + ', ' + formatDay(date);
+  $('day-count').textContent = lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']);
+
+  const list = $('day-lessons');
+  list.replaceChildren();
+  if (!lessons.length) {
+    list.appendChild(el('div', 'empty-note', 'В этот день пар нет. Хорошее время для конспектов и карточек.'));
+  } else {
+    lessons.forEach((lesson, index) => list.appendChild(buildLessonRow(lesson, date, index)));
+  }
+
+  const field = $('day-notes');
+  if (document.activeElement !== field) field.value = dayNotes[state.selectedDate] || '';
+}
+
+/* ================== КАЛЕНДАРЬ ================== */
+function renderCalendar() {
+  const year = state.calMonth.getFullYear();
+  const month = state.calMonth.getMonth();
+  $('cal-month').textContent = MONTHS_NOM[month] + ' ' + year;
+
+  const first = new Date(year, month, 1);
+  const offset = (first.getDay() + 6) % 7;
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const totalCells = Math.ceil((offset + daysInMonth) / 7) * 7;
+  const gridStart = addDays(first, -offset);
+  const todayISO = toISO(new Date());
+  const grid = $('cal-grid');
+  grid.replaceChildren();
+
+  for (let i = 0; i < totalCells; i += 1) {
+    const date = addDays(gridStart, i);
+    const iso = toISO(date);
+    const inMonth = date.getMonth() === month;
+    const lessons = lessonsForDate(date);
+    const statuses = lessons.map((lesson, index) => statusOf(date, index));
+    const hasSkip = statuses.includes('skip');
+    const marked = statuses.filter(status => status !== 'pending').length;
+
+    if (!inMonth) {
+      const filler = el('div', 'cal-cell other');
+      filler.appendChild(el('span', 'cal-dom', String(date.getDate())));
+      grid.appendChild(filler);
+      continue;
+    }
+
+    const cell = el('button', 'cal-cell' + (iso === todayISO ? ' today' : '') + (iso === state.selectedDate ? ' selected' : '') + (hasSkip ? ' has-skip' : ''), '');
+    cell.type = 'button';
+    cell.appendChild(el('span', 'cal-dom', String(date.getDate())));
+    const bars = el('span', 'cal-bars');
+    if (lessons.length) {
+      statuses.forEach(status => bars.appendChild(el('span', 'cal-bar bar-' + status)));
+    }
+    cell.appendChild(bars);
+    const text = capitalize(WEEKDAYS_FULL[date.getDay()]) + ', ' + formatDay(date) + '. ' +
+      (lessons.length ? lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']) + ', отмечено ' + marked : 'пар нет');
+    cell.title = text;
+    cell.setAttribute('aria-label', text);
+    cell.addEventListener('click', () => {
+      state.selectedDate = iso;
+      state.weekStart = mondayOf(date);
+      renderCalendar();
+      renderCalDetail();
+      if (state.tab === 'schedule') { renderWeek(); renderDayPanel(); }
+      if (window.matchMedia('(max-width: 1023px)').matches) {
+        const panel = $('cal-detail-panel');
+        if (panel) setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
+      }
+    });
+    grid.appendChild(cell);
+  }
+  renderMonthStats();
+}
+
+function renderCalDetail() {
+  const date = fromISO(state.selectedDate);
+  const lessons = lessonsForDate(date);
+  $('cal-detail-eyebrow').textContent = 'Выбранный день';
+  $('cal-detail-title').textContent = capitalize(WEEKDAYS_FULL[date.getDay()]) + ', ' + formatDay(date);
+  const marked = lessons.map((lesson, index) => statusOf(date, index)).filter(status => status !== 'pending').length;
+  $('cal-detail-sub').textContent = parityLabel(date) + ' · ' +
+    (lessons.length ? lessons.length + ' ' + plural(lessons.length, ['пара', 'пары', 'пар']) + ' · отмечено ' + marked : 'пар нет');
+  const list = $('cal-detail-lessons');
+  list.replaceChildren();
+  if (!lessons.length) {
+    list.appendChild(el('div', 'empty-note', 'Пар нет. День можно оставить без отметок.'));
+  } else {
+    lessons.forEach((lesson, index) => list.appendChild(buildLessonRow(lesson, date, index)));
+  }
+}
+
+function renderMonthStats() {
+  const year = state.calMonth.getFullYear();
+  const month = state.calMonth.getMonth();
+  const days = new Date(year, month + 1, 0).getDate();
+  let was = 0, skip = 0, marked = 0;
+  const skippedLessons = [];
+  for (let day = 1; day <= days; day += 1) {
+    const date = new Date(year, month, day);
+    lessonsForDate(date).forEach((lesson, index) => {
+      const status = statusOf(date, index);
+      if (status === 'was') { was += 1; marked += 1; }
+      if (status === 'skip') { skip += 1; marked += 1; skippedLessons.push({ date: date, lesson: lesson }); }
+    });
+  }
+  const percent = marked ? Math.round((was / marked) * 100) : null;
+  $('month-attendance').textContent = percent === null ? '—' : percent + '%';
+  $('month-skips').textContent = skip;
+  $('month-marked').textContent = marked;
+
+  const list = $('month-skip-list');
+  list.replaceChildren();
+  if (!skippedLessons.length) {
+    list.appendChild(el('div', 'week-note', 'В этом месяце пропусков нет.'));
+    return;
+  }
+  skippedLessons.sort((a, b) => b.date - a.date);
+  skippedLessons.forEach(item => {
+    const row = el('div', 'skip-item');
+    const date = formatDay(item.date);
+    row.appendChild(el('span', 'd', date));
+    row.appendChild(el('span', 'n', item.lesson.name + ' · ' + item.lesson.type));
+    list.appendChild(row);
+  });
+}
+
+function shiftMonth(delta) {
+  state.calMonth = new Date(state.calMonth.getFullYear(), state.calMonth.getMonth() + delta, 1);
+  renderCalendar();
+}
+
+function goToday() {
+  const today = new Date();
+  state.calMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  state.selectedDate = toISO(today);
+  state.weekStart = mondayOf(today);
+  renderCalendar();
+  renderCalDetail();
+}
+/* ================== КАРТОЧКИ ================== */
+const CARD_DECK = [
+  { id: 'c1', tag: 'ООП', q: 'Что такое инкапсуляция?', a: 'Сокрытие внутренней реализации и объединение данных с методами в одном классе. Снаружи доступен только публичный интерфейс, а поля защищены модификаторами доступа.' },
+  { id: 'c2', tag: 'ООП', q: 'Что такое полиморфизм?', a: 'Возможность использовать единый интерфейс для объектов разных типов. Один и тот же вызов метода приводит к разному поведению в зависимости от фактического класса объекта.' },
+  { id: 'c3', tag: 'Алгоритмы', q: 'Какова сложность бинарного поиска?', a: 'O(log n) — при условии, что массив отсортирован. На каждом шаге отбрасывается половина оставшихся элементов.' },
+  { id: 'c4', tag: 'Базы данных', q: 'Что требует третья нормальная форма?', a: 'Выполнения 2НФ и отсутствия транзитивных зависимостей: каждый неключевой атрибут зависит только от первичного ключа и ни от чего больше.' },
+  { id: 'c5', tag: 'Математика', q: 'Что показывает производная функции?', a: 'Скорость изменения функции. Геометрически — наклон касательной к графику в данной точке.' },
+  { id: 'c6', tag: 'SQL', q: 'Чем LEFT JOIN отличается от INNER JOIN?', a: 'INNER JOIN возвращает только строки, у которых есть совпадение в обеих таблицах. LEFT JOIN сохраняет все строки левой таблицы, а для отсутствующих совпадений подставляет NULL.' }
+];
+
+const flash = {
+  deck: CARD_DECK.slice(),
+  idx: 0,
+  flipped: false,
+  known: new Set(),
+  repeat: new Set(),
+  finished: false
+};
+
+function renderCards() {
+  const stage = $('flash-stage');
+  const actions = $('flash-actions');
+  const noteSlot = $('flash-note-slot');
+  stage.replaceChildren();
+  actions.replaceChildren();
+  noteSlot.replaceChildren();
+
+  const total = flash.deck.length;
+  const done = flash.finished ? total : Math.min(flash.idx, total);
+  $('card-counter').textContent = pad(Math.min(flash.idx + 1, total)) + ' / ' + pad(total);
+  const percent = total ? Math.round((done / total) * 100) : 0;
+  $('card-progress-bar').style.width = percent + '%';
+  $('card-progress-pct').textContent = percent + '%';
+  $('card-answered').textContent = done + ' из ' + total;
+  $('card-known').textContent = flash.known.size;
+  $('card-repeat').textContent = flash.repeat.size;
+
+  if (flash.finished) {
+    $('card-counter').textContent = pad(total) + ' / ' + pad(total);
+    const summary = el('div', 'panel');
+    summary.appendChild(el('p', 'eyebrow', 'Круг завершён'));
+    summary.appendChild(el('h3', 'display-lg mt-3', 'Все карточки пройдены'));
+    summary.appendChild(el('p', 'hero-sub', 'Помню: ' + flash.known.size + ' из ' + total + '. К повторению: ' + flash.repeat.size + '.'));
+    const again = el('button', 'btn btn-dark mt-5', 'Пройти заново');
+    again.type = 'button';
+    again.addEventListener('click', resetCards);
+    summary.appendChild(again);
+    stage.appendChild(summary);
+
+    if (flash.repeat.size) {
+      const repeat = el('button', 'btn btn-outline btn-block', 'Повторить сложные');
+      repeat.type = 'button';
+      repeat.innerHTML = icon('refresh') + '<span>Повторить сложные (' + flash.repeat.size + ')</span>';
+      repeat.addEventListener('click', repeatCards);
+      actions.appendChild(repeat);
+    }
+    return;
+  }
+
+  const cardData = flash.deck[flash.idx];
+  const card = el('button', 'flashcard', '');
+  card.type = 'button';
+  card.setAttribute('aria-label', 'Карточка: ' + cardData.q + '. Нажмите, чтобы перевернуть.');
+  const top = el('div', 'flash-top');
+  top.appendChild(el('span', 'eyebrow', cardData.tag));
+  top.appendChild(el('span', 'label-muted', 'Карточка ' + pad(flash.idx + 1)));
+  card.appendChild(top);
+
+  const body = el('div', 'flash-body');
+  body.appendChild(el('p', 'label-muted', 'Вопрос'));
+  body.appendChild(el('h3', 'flash-question', cardData.q));
+  if (flash.flipped) {
+    const answer = el('div', 'mt-5');
+    const rule = el('div', 'rule');
+    answer.appendChild(rule);
+    answer.appendChild(el('p', 'label-muted', 'Правильный ответ'));
+    answer.appendChild(el('p', 'flash-answer-text', cardData.a));
+    body.appendChild(answer);
+  }
+  card.appendChild(body);
+
+  const foot = el('div', 'flash-foot');
+  foot.appendChild(el('span', 'flash-hint', flash.flipped ? 'Ответ открыт' : 'Нажмите, чтобы открыть ответ'));
+  foot.appendChild(el('span', 'label-muted', flash.repeat.has(cardData.id) ? 'К повторению' : ''));
+  card.appendChild(foot);
+  card.addEventListener('click', flipCard);
+  stage.appendChild(card);
+
+  if (!flash.flipped) {
+    const wrong = el('button', 'btn btn-outline', '');
+    wrong.type = 'button';
+    wrong.style.borderColor = 'var(--wine)';
+    wrong.style.color = 'var(--wine)';
+    wrong.innerHTML = icon('x') + '<span>Не помню</span>';
+    wrong.addEventListener('click', markWrong);
+    const known = el('button', 'btn btn-dark', '');
+    known.type = 'button';
+    known.innerHTML = icon('check') + '<span>Помню</span>';
+    known.addEventListener('click', markKnown);
+    actions.append(wrong, known);
+  } else {
+    const back = el('button', 'btn btn-outline', 'К вопросу');
+    back.type = 'button';
+    back.addEventListener('click', flipCard);
+    const next = el('button', 'btn btn-dark', '');
+    next.type = 'button';
+    next.innerHTML = 'Дальше ' + icon('arrow-right');
+    next.addEventListener('click', nextCard);
+    actions.append(back, next);
+    if (flash.repeat.has(cardData.id)) {
+      noteSlot.appendChild(el('div', 'flash-note', 'Карточка отмечена к повторению: правильный ответ открыт, вернитесь к ней позже.'));
+    }
+  }
+}
+
+function flipCard() {
+  if (flash.finished) return;
+  flash.flipped = !flash.flipped;
+  renderCards();
+}
+function markWrong() {
+  const card = flash.deck[flash.idx];
+  if (card) flash.repeat.add(card.id);
+  flash.flipped = true;
+  renderCards();
+}
+function markKnown() {
+  const card = flash.deck[flash.idx];
+  if (card) { flash.known.add(card.id); flash.repeat.delete(card.id); }
+  nextCard();
+}
+function nextCard() {
+  flash.idx += 1;
+  flash.flipped = false;
+  if (flash.idx >= flash.deck.length) flash.finished = true;
+  renderCards();
+}
+function resetCards() {
+  flash.deck = CARD_DECK.slice();
+  flash.idx = 0;
+  flash.flipped = false;
+  flash.finished = false;
+  flash.known = new Set();
+  flash.repeat = new Set();
+  renderCards();
+}
+function repeatCards() {
+  const ids = Array.from(flash.repeat);
+  if (!ids.length) return;
+  flash.deck = CARD_DECK.filter(card => ids.includes(card.id));
+  flash.idx = 0;
+  flash.flipped = false;
+  flash.finished = false;
+  flash.known = new Set();
+  flash.repeat = new Set();
+  renderCards();
+}
+/* ================== ИИ-РЕПЕТИТОР ================== */
+const AI_CONFIG = {
+  apiKey: '',
+  model: 'gemini-3.5-flash-lite',
+  thinkingLevel: 'low'
+};
+const AI_TIMEOUT_MS = 90000;
+const MODEL_LABELS = {
+  'gemini-3.8-flash': '3.8 Flash',
+  'gemini-3.5-flash-lite': '3.5 Flash-Lite',
+  'gemini-2.5-flash': '2.5 Flash'
+};
+const AI_SYSTEM_PROMPT = 'Ты — дружелюбный и умный ИИ-репетитор для студента. Помогай с учёбой, кодом и конспектами. Отвечай кратко, понятно и структурированно на русском языке. Сначала давай суть, потом короткое пояснение.';
+
+try {
+  const savedKey = localStorage.getItem(STORE_PREFIX + 'gemini_key') || localStorage.getItem('studyflow_gemini_key');
+  if (savedKey) AI_CONFIG.apiKey = savedKey;
+  const savedModel = localStorage.getItem(STORE_PREFIX + 'model') || localStorage.getItem('studyflow_model');
+  if (savedModel) AI_CONFIG.model = savedModel;
+} catch (error) { /* хранилище недоступно */ }
+
+function buildThinkingConfig() {
+  if (AI_CONFIG.model === 'gemini-2.5-flash') return { thinkingBudget: 0 };
+  if (AI_CONFIG.model === 'gemini-3.5-flash-lite') return { thinkingLevel: 'minimal' };
+  return { thinkingLevel: AI_CONFIG.thinkingLevel };
+}
+function hasApiKey() {
+  return typeof AI_CONFIG.apiKey === 'string' && AI_CONFIG.apiKey.trim().length > 0;
+}
+function updateAiStatus() {
+  const on = hasApiKey();
+  document.querySelectorAll('[data-ai-status]').forEach(pill => {
+    const text = pill.querySelector('.status-text');
+    if (text) text.textContent = on ? 'ИИ подключён' : 'ИИ в демо-режиме';
+    pill.classList.toggle('is-on', on);
+  });
+  const connection = $('ai-connection');
+  if (connection) connection.textContent = on ? 'Подключён' : 'Демо-режим';
+}
+function promptApiKey() {
+  const hint = hasApiKey()
+    ? 'Ключ уже сохранён. Введите новый, чтобы заменить его:'
+    : 'Вставьте API-ключ Google AI Studio:';
+  const value = window.prompt(hint + '\nКлюч хранится только в этом браузере.');
+  if (value === null) return;
+  const key = value.trim();
+  if (!key) return;
+  AI_CONFIG.apiKey = key;
+  try { localStorage.setItem(STORE_PREFIX + 'gemini_key', key); } catch (error) { /* ignore */ }
+  updateAiStatus();
+  window.alert('Ключ сохранён. Теперь можно задавать вопросы ИИ.');
+}
+function appendMessage(kind, text, label) {
+  const box = $('chat-box');
+  const node = el('div', 'msg ' + kind);
+  if (label) node.appendChild(el('span', 'msg-label', label));
+  node.appendChild(document.createTextNode(text));
+  box.appendChild(node);
+  box.scrollTop = box.scrollHeight;
+  return node;
+}
+function askAI(text) {
+  switchTab('ai');
+  $('ai-input').value = text;
+  sendAI();
+}
+function quickAsk(text) {
+  $('ai-input').value = text;
+  sendAI();
+}
+
+async function sendAI() {
+  if (state.aiBusy) return;
+  const input = $('ai-input');
+  const sendButton = $('ai-send');
+  const value = input.value.trim();
+  if (!value) return;
+
+  appendMessage('msg-user', value, 'Вы');
+  input.value = '';
+
+  if (!hasApiKey()) {
+    appendMessage('msg-error', 'ИИ пока не подключён. Нажмите «Ключ API» в блоке «Подключение» и вставьте ключ Google AI Studio. Остальные разделы работают и без ключа.', 'Система');
+    return;
+  }
+
+  const modelLabel = MODEL_LABELS[AI_CONFIG.model] || AI_CONFIG.model;
+  const loading = appendMessage('msg-ai', modelLabel + ' · готовит ответ…', 'ИИ-репетитор');
+  const loadingText = loading.lastChild;
+  state.aiBusy = true;
+  sendButton.disabled = true;
+
+  let elapsed = 0;
+  const timer = setInterval(() => {
+    elapsed += 1;
+    if (loading.isConnected && loadingText) loadingText.textContent = modelLabel + ' · готовит ответ… ' + elapsed + ' с';
+  }, 1000);
+
+  const controller = new AbortController();
+  let timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+  const keepAlive = () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => controller.abort(), AI_TIMEOUT_MS);
+  };
+
+  let answerText = null;
+  let reply = '';
+  const showChunk = delta => {
+    reply += delta;
+    if (!answerText) {
+      if (loading.isConnected) loading.remove();
+      const answer = el('div', 'msg msg-ai');
+      answer.appendChild(el('span', 'msg-label', 'ИИ-репетитор'));
+      answerText = el('span', '', '');
+      answer.appendChild(answerText);
+      $('chat-box').appendChild(answer);
+    }
+    answerText.textContent = reply;
+    const box = $('chat-box');
+    box.scrollTop = box.scrollHeight;
+  };
+
+  try {
+    const response = await fetch(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(AI_CONFIG.model) + ':streamGenerateContent?alt=sse',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-goog-api-key': AI_CONFIG.apiKey },
+        body: JSON.stringify({
+          systemInstruction: { parts: [{ text: AI_SYSTEM_PROMPT }] },
+          contents: [{ role: 'user', parts: [{ text: value }] }],
+          generationConfig: { thinkingConfig: buildThinkingConfig() }
+        }),
+        signal: controller.signal
+      }
+    );
+
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      const apiMessage = data && data.error && data.error.message ? data.error.message : 'HTTP ' + response.status;
+      const apiError = new Error(apiMessage);
+      apiError.status = response.status;
+      throw apiError;
+    }
+    if (!response.body) throw new Error('Браузер не поддерживает потоковый ответ');
+
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    const handleLine = line => {
+      const trimmed = line.trim();
+      if (!trimmed.startsWith('data:')) return;
+      const payload = trimmed.slice(5).trim();
+      if (!payload || payload === '[DONE]') return;
+      let chunk;
+      try { chunk = JSON.parse(payload); } catch (parseError) { return; }
+      if (chunk.error) throw new Error(chunk.error.message || 'Ошибка потока');
+      const parts = chunk.candidates && chunk.candidates[0] && chunk.candidates[0].content && chunk.candidates[0].content.parts;
+      if (!Array.isArray(parts)) return;
+      const delta = parts.filter(part => part && !part.thought).map(part => part.text || '').join('');
+      if (delta) showChunk(delta);
+    };
+
+    while (true) {
+      const result = await reader.read();
+      if (result.done) break;
+      keepAlive();
+      buffer += decoder.decode(result.value, { stream: true });
+      let newlineIndex;
+      while ((newlineIndex = buffer.indexOf('\n')) !== -1) {
+        handleLine(buffer.slice(0, newlineIndex));
+        buffer = buffer.slice(newlineIndex + 1);
+      }
+    }
+    buffer += decoder.decode();
+    if (buffer) handleLine(buffer);
+    if (!reply.trim()) throw new Error('Пустой ответ API');
+  } catch (error) {
+    console.error(error);
+    const apiMessage = error.message || '';
+    let message = 'Не удалось получить ответ от ИИ.';
+    if (error.name === 'AbortError') {
+      message = AI_CONFIG.model === 'gemini-3.8-flash'
+        ? '3.8 Flash не ответила за ' + Math.round(AI_TIMEOUT_MS / 1000) + ' секунд. Попробуйте ещё раз или выберите 3.5 Flash-Lite: она отвечает быстрее.'
+        : modelLabel + ' не ответила за ' + Math.round(AI_TIMEOUT_MS / 1000) + ' секунд. Проверьте соединение и попробуйте снова.';
+    } else if (/location is not supported/i.test(apiMessage)) {
+      message = 'Gemini API недоступен из вашего региона (ошибка «User location is not supported»). Ключ здесь ни при чём — это ограничение Google по IP-адресу. Нужен сервер или прокси в поддерживаемой стране.\n\nОтвет Google: ' + apiMessage;
+    } else if (/API key not valid|API_KEY_INVALID/i.test(apiMessage)) {
+      message = 'Google не принял ключ. Скопируйте его из AI Studio целиком и убедитесь, что это ключ именно для Gemini API.\n\nОтвет Google: ' + apiMessage;
+    } else if (/no longer available to new users/i.test(apiMessage)) {
+      message = 'Эта модель больше недоступна для новых ключей. Выберите в списке другую модель.\n\nОтвет Google: ' + apiMessage;
+    } else if (error.status === 429 || /RESOURCE_EXHAUSTED|quota/i.test(apiMessage)) {
+      message = 'Исчерпан лимит бесплатного тарифа. Подождите до сброса квоты или переключитесь на более лёгкую модель.\n\nОтвет Google: ' + apiMessage;
+    } else if (error instanceof TypeError) {
+      message = 'Нет связи с сервером ИИ. Проверьте интернет и попробуйте снова.';
+    } else if (apiMessage && apiMessage !== 'Пустой ответ API') {
+      message = 'Ошибка ИИ: ' + apiMessage;
+    }
+    if (loading.isConnected) loading.remove();
+    appendMessage('msg-error', message, 'Ошибка');
+  } finally {
+    clearTimeout(timeout);
+    clearInterval(timer);
+    state.aiBusy = false;
+    sendButton.disabled = false;
+    const box = $('chat-box');
+    box.scrollTop = box.scrollHeight;
+  }
+}
+
+/* ================== ИНИЦИАЛИЗАЦИЯ ================== */
+function updateHeaderDate() {
+  const date = new Date();
+  $('header-date').textContent = capitalize(WEEKDAYS_FULL[date.getDay()]) + ' · ' + formatDay(date) + ' ' + date.getFullYear();
+}
+
+document.querySelectorAll('.nav-btn').forEach(button => {
+  button.addEventListener('click', () => switchTab(button.dataset.tab));
+});
+document.querySelectorAll('[data-close="modal"]').forEach(node => {
+  node.addEventListener('click', closeModal);
+});
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape') closeModal();
+});
+$('day-notes').addEventListener('input', event => {
+  dayNotes[state.selectedDate] = event.target.value;
+  save('day-notes', dayNotes);
+});
+
+const modelSelect = $('ai-model-select');
+const knownModels = Array.from(modelSelect.options).map(option => option.value);
+if (!knownModels.includes(AI_CONFIG.model)) AI_CONFIG.model = 'gemini-3.5-flash-lite';
+modelSelect.value = AI_CONFIG.model;
+modelSelect.addEventListener('change', event => {
+  AI_CONFIG.model = event.target.value;
+  try { localStorage.setItem(STORE_PREFIX + 'model', AI_CONFIG.model); } catch (error) { /* ignore */ }
+});
+
+updateHeaderDate();
+renderSubjects();
+renderNotes();
+renderHome();
+renderWeek();
+renderDayPanel();
+renderCalendar();
+renderCalDetail();
+renderCards();
+updateAiStatus();
+
+const hashTab = (window.location.hash || '').replace('#', '');
+if (TABS.includes(hashTab)) switchTab(hashTab);
+window.addEventListener('hashchange', () => {
+  const next = (window.location.hash || '').replace('#', '');
+  if (TABS.includes(next)) switchTab(next);
+});
+
+</script>
+</body>
+</html>
